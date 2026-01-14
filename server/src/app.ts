@@ -3,7 +3,6 @@ import type { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 
-// Middleware
 const createApp = () => {
   const app = express();
   app.use(helmet());
