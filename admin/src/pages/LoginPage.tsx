@@ -14,17 +14,24 @@ export function LoginPage() {
     setError("");
     setIsLoading(true);
 
-    try {
-      await signIn.email({
+    await signIn.email(
+      {
         email: formData.email,
         password: formData.password,
-      });
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Invalid email or password");
-    } finally {
-      setIsLoading(false);
-    }
+      },
+      {
+        onRequest: () => setIsLoading(true),
+        onSuccess: () => {
+          setIsLoading(false);
+          setError("")
+          navigate("/dashboard");
+        },
+        onError: (ctx) => {
+          setIsLoading(false);
+          setError(ctx.error.message);
+        },
+      }
+    );
   };
 
   return (

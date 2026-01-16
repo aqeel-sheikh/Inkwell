@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signUp } from "@/auth/authClient";
 import { Button, Input } from "@/components";
+import { signUpSchema } from "@/schemas/userData.schema";
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -9,34 +10,55 @@ export function RegisterPage() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [zodErrors, setZodErrors] = useState<Record<string, string>>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
-    try {
-      await signUp.email({
+    const result = signUpSchema.safeParse(formData);
+
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.issues.forEach((err) => {
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
+      });
+      setZodErrors(fieldErrors);
+      setIsLoading(false);
+      return;
+    }
+    setZodErrors({});
+
+    await signUp.email(
+      {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-      });
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Failed to create account.");
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
+      },
+      {
+        onRequest: () => setIsLoading(true),
+        onSuccess: () => {
+          setIsLoading(false);
+          setError("");
+          navigate("/dashboard");
+        },
+        onError: (ctx) => {
+          setIsLoading(false);
+          setError(ctx.error.message);
+        },
+      }
+    );
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-primary-50 to-primary-100">
+    <div className="min-h-screen p-6 flex items-center justify-center bg-linear-to-br from-primary-50 to-primary-100">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-xl shadow-lg px-8">
+        <div className="bg-white rounded-xl shadow-lg p-8">
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center">
@@ -79,6 +101,9 @@ export function RegisterPage() {
               placeholder="John Doe"
               required
             />
+            {zodErrors.name && (
+              <p className="text-sm text-danger-dark">{zodErrors.name}</p>
+            )}
 
             <Input
               label="Email"
@@ -90,6 +115,9 @@ export function RegisterPage() {
               placeholder="you@example.com"
               required
             />
+            {zodErrors.email && (
+              <p className="text-sm text-danger-dark">{zodErrors.email}</p>
+            )}
 
             <Input
               label="Password"
@@ -102,6 +130,24 @@ export function RegisterPage() {
               required
               helperText="Minimum 8 characters"
             />
+            {zodErrors.password && (
+              <p className="text-sm text-danger-dark">{zodErrors.password}</p>
+            )}
+            <Input
+              label="Confirm Password"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={(e) =>
+                setFormData({ ...formData, confirmPassword: e.target.value })
+              }
+              placeholder="••••••••"
+              required
+            />
+            {zodErrors.confirmPassword && (
+              <p className="text-sm text-danger-dark">
+                {zodErrors.confirmPassword}
+              </p>
+            )}
 
             <Button type="submit" fullWidth isLoading={isLoading}>
               Create Account
