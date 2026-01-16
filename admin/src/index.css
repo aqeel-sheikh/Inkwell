@@ -76,9 +76,6 @@
 }
 
 @layer components {
-  .prose {
-    @apply max-w-none text-primary-800 leading-relaxed;
-  }
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     @apply w-2 h-2;
@@ -150,7 +147,7 @@
   }
   /* Editor styles for rich text */
   .editor-content {
-    @apply prose prose-sm max-w-none;
+    @apply max-w-none text-primary-800 leading-relaxed
   }
 
   .editor-content h1 {
