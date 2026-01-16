@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router-dom'
-import { Sidebar, Header } from '@/components'
+import { Outlet } from "react-router";
+import { Sidebar, Header } from "@/components";
 
 export function DashboardLayout() {
   return (
@@ -14,5 +14,5 @@ export function DashboardLayout() {
         </main>
       </div>
     </div>
-  )
+  );
 }

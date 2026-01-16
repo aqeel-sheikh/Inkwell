@@ -98,7 +98,7 @@ export function BlogListPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 flex-shrink-0">
+                <div className="flex items-center gap-2 shrink-0">
                   <Link to={`/dashboard/blogs/${post.id}/edit`}>
                     <Button variant="ghost" size="sm">
                       <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
