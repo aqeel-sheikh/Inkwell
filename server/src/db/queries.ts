@@ -7,5 +7,5 @@ export const insertPost = async (postData: BlogPostType, userId: string) => {
       ...postData,
       authorId: userId,
     },
-   }   ) 
+  });
 };
