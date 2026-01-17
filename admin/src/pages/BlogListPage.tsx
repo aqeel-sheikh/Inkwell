@@ -12,6 +12,7 @@ import {
 
 export function BlogListPage() {
   const { data, isLoading } = useBlogPosts();
+
   const deleteBlog = useDeleteBlog();
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -88,6 +89,13 @@ export function BlogListPage() {
         </Card>
       ) : (
         <div className="space-y-4">
+          <div className="border flex justify-between bg-white/20 px-6 py-2 rounded-md gap-4 backdrop-blur-2xl">
+            <p>Total Blogs: {data.total}</p>
+            <p className="flex gap-1">
+              <span>Page:</span>
+              {data.page} / {data.totalPages}
+            </p>
+          </div>
           {data.data.map((post) => (
             <Card key={post.id} className="hover:shadow-md transition-shadow">
               <CardBody className="flex items-start justify-between gap-4">

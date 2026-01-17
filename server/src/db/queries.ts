@@ -1,10 +1,30 @@
 import { prisma } from "@/config/prisma";
 import type { BlogPostType } from "@/types/posts.schema";
 
+interface SelectUserPosts {
+  userId: string;
+  page: number;
+  limit: number;
+}
+
 export const insertPost = async (postData: BlogPostType, userId: string) => {
   await prisma.blogPost.create({
     data: {
       ...postData,
+      authorId: userId,
+    },
+  });
+};
+
+export const selectUserPosts = async ({
+  userId,
+  page,
+  limit,
+}: SelectUserPosts) => {
+  return await prisma.blogPost.findMany({
+    skip: (page - 1) * limit,
+    take: limit,
+    where: {
       authorId: userId,
     },
   });
