@@ -109,13 +109,13 @@ npm run build
 The BetterAuth client is configured in `src/auth/authClient.ts`:
 
 ```typescript
-import { createAuthClient } from "better-auth/react"
+import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
   baseURL: AUTH_BASE_URL,
-})
+});
 
-export const { signIn, signUp, signOut, useSession } = authClient
+export const { signIn, signUp, signOut, useSession } = authClient;
 ```
 
 ### Authentication Flow
@@ -133,10 +133,10 @@ import { useSession, signOut } from '@/auth/authClient'
 
 function MyComponent() {
   const { data: session, isPending } = useSession()
-  
+
   if (isPending) return <Loading />
   if (!session) return <Login />
-  
+
   return <div>Welcome {session.user.name}</div>
 }
 ```
@@ -155,12 +155,14 @@ The backend must implement BetterAuth server endpoints:
 The admin expects the following API endpoints:
 
 ### Authentication (BetterAuth)
+
 - `POST /api/auth/sign-up/email` - Register
 - `POST /api/auth/sign-in/email` - Login
 - `POST /api/auth/sign-out` - Logout
 - `GET /api/auth/get-session` - Get session
 
 ### Blog Posts
+
 - `GET /api/posts?page=1&limit=20` - List blog posts (paginated)
 - `GET /api/posts/:id` - Get single blog post
 - `POST /api/posts` - Create new blog post
@@ -168,15 +170,18 @@ The admin expects the following API endpoints:
 - `DELETE /api/posts/:id` - Delete blog post
 
 ### Dashboard
+
 - `GET /api/dashboard/stats` - Get dashboard statistics
 
 ## Routes
 
 ### Public Routes
+
 - `/login` - Login page
 - `/register` - Registration page
 
 ### Protected Routes (requires authentication)
+
 - `/dashboard` - Dashboard overview
 - `/dashboard/blogs` - Blog list
 - `/dashboard/blogs/new` - Create new blog
@@ -185,6 +190,7 @@ The admin expects the following API endpoints:
 ## Features Detail
 
 ### Dashboard
+
 - Total posts count
 - Published posts count
 - Draft posts count
@@ -192,6 +198,7 @@ The admin expects the following API endpoints:
 - Quick actions for common tasks
 
 ### Blog Management
+
 - View all blog posts
 - Create new posts with:
   - Title, excerpt, content
@@ -203,6 +210,7 @@ The admin expects the following API endpoints:
 - Publish/Unpublish toggle
 
 ### Authentication
+
 - Email/password registration
 - Email/password login
 - Persistent sessions via cookies
@@ -212,12 +220,14 @@ The admin expects the following API endpoints:
 ## Design System
 
 ### Colors
+
 - **Primary**: Blue (50-900) - Main brand color
 - **Success**: Green - Published posts
 - **Warning**: Orange - Draft posts
 - **Danger**: Red - Delete actions
 
 ### Typography
+
 - **Display**: Sora (headings)
 - **Sans**: Inter (body text)
 - **Mono**: JetBrains Mono (code)

@@ -147,7 +147,7 @@
   }
   /* Editor styles for rich text */
   .editor-content {
-    @apply max-w-none text-primary-800 leading-relaxed
+    @apply max-w-none text-primary-800 leading-relaxed;
   }
 
   .editor-content h1 {

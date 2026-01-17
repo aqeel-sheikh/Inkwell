@@ -51,7 +51,7 @@ export function RegisterPage() {
           setIsLoading(false);
           setError(ctx.error.message);
         },
-      }
+      },
     );
   };
 
@@ -66,7 +66,8 @@ export function RegisterPage() {
                 className="w-7 h-7 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -158,7 +159,8 @@ export function RegisterPage() {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-primary-600 hover:text-primary-700 font-medium">
+              className="text-primary-600 hover:text-primary-700 font-medium"
+            >
               Sign in
             </Link>
           </p>

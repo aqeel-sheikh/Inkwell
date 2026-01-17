@@ -23,14 +23,14 @@ export function LoginPage() {
         onRequest: () => setIsLoading(true),
         onSuccess: () => {
           setIsLoading(false);
-          setError("")
+          setError("");
           navigate("/dashboard");
         },
         onError: (ctx) => {
           setIsLoading(false);
           setError(ctx.error.message);
         },
-      }
+      },
     );
   };
 
@@ -45,7 +45,8 @@ export function LoginPage() {
                 className="w-7 h-7 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -101,7 +102,8 @@ export function LoginPage() {
             Don't have an account?{" "}
             <Link
               to="/register"
-              className="text-primary-600 hover:text-primary-700 font-medium">
+              className="text-primary-600 hover:text-primary-700 font-medium"
+            >
               Sign up
             </Link>
           </p>

@@ -17,7 +17,8 @@ function StatCard({
     <Card className="hover:shadow-md transition-shadow">
       <CardBody className="flex items-center gap-4">
         <div
-          className={`w-12 h-12 ${color} rounded-lg flex items-center justify-center shrink-0`}>
+          className={`w-12 h-12 ${color} rounded-lg flex items-center justify-center shrink-0`}
+        >
           {icon}
         </div>
         <div>
@@ -59,7 +60,8 @@ export function DashboardPage() {
               className="w-6 h-6 text-white"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -79,7 +81,8 @@ export function DashboardPage() {
               className="w-6 h-6 text-white"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -99,7 +102,8 @@ export function DashboardPage() {
               className="w-6 h-6 text-white"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -119,7 +123,8 @@ export function DashboardPage() {
               className="w-6 h-6 text-white"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -149,13 +154,15 @@ export function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Link
               to="/dashboard/blogs/new"
-              className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-all group">
+              className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-all group"
+            >
               <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center group-hover:bg-primary-200">
                 <svg
                   className="w-5 h-5 text-primary-600"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="currentColor">
+                  stroke="currentColor"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -172,13 +179,15 @@ export function DashboardPage() {
 
             <Link
               to="/dashboard/blogs"
-              className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-all group">
+              className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-all group"
+            >
               <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center group-hover:bg-primary-200">
                 <svg
                   className="w-5 h-5 text-primary-600"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="currentColor">
+                  stroke="currentColor"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -197,13 +206,15 @@ export function DashboardPage() {
               href={import.meta.env.VITE_CLIENT_FRONTEND_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-all group">
+              className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-all group"
+            >
               <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center group-hover:bg-primary-200">
                 <svg
                   className="w-5 h-5 text-primary-600"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="currentColor">
+                  stroke="currentColor"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
