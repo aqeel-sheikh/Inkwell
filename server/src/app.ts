@@ -14,7 +14,7 @@ const createApp = () => {
     cors({
       origin: process.env.ADMIN_FRONTEND_URL,
       credentials: true,
-    })
+    }),
   );
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));

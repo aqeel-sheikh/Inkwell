@@ -13,4 +13,4 @@ export const insertPost = async (postData: BlogPostType, userId: string) => {
     console.error("Failed to insert blog post:", error);
     throw new Error("Could not create blog post");
   }
-}
+};

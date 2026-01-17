@@ -6,5 +6,3 @@ const rootRouter = Router();
 rootRouter.get("/", rootController);
 
 export { rootRouter };
-
-

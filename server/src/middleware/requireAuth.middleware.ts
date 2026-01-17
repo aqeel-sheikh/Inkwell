@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 export const requireAuth = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const session = await auth.api.getSession({
