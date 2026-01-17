@@ -4,10 +4,7 @@ import { insertPost } from "@/db/queries";
 
 export const createPost = async (req: Request, res: Response) => {
   const userId = (req as any).userId;
-  if (!userId) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
+
   const result = blogPostSchema.safeParse(req.body);
   if (!result.success) {
     const fieldErrors: Record<string, string> = {};
@@ -28,3 +25,5 @@ export const createPost = async (req: Request, res: Response) => {
   }
   return;
 };
+
+
