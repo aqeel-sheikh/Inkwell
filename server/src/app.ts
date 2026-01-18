@@ -12,7 +12,10 @@ const createApp = () => {
   app.use(helmet());
   app.use(
     cors({
-      origin: process.env.ADMIN_FRONTEND_URL,
+      origin: [
+        process.env.ADMIN_FRONTEND_URL,
+        process.env.CLIENT_FRONTEND_URL,
+      ].filter((url): url is string => typeof url === "string"),
       credentials: true,
     }),
   );
