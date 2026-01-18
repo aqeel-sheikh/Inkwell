@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSession, signOut } from "@/auth/authClient";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export function Header() {
   const { data: session } = useSession();
@@ -23,9 +23,9 @@ export function Header() {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
         >
-          {session?.user.avatar ? (
+          {session?.user.image ? (
             <img
-              src={session.user.avatar}
+              src={session.user.image}
               alt={session.user.name}
               className="w-8 h-8 rounded-full"
             />

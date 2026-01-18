@@ -1,6 +1,6 @@
 import { useDashboardStats } from "@/features/dashboard/useDashboard";
 import { Card, CardBody, LoadingSpinner } from "@/components";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 function StatCard({
   icon,

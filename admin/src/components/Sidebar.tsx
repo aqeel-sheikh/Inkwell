@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 
 const navigation = [
   {
@@ -45,7 +45,7 @@ export function Sidebar() {
   const location = useLocation();
 
   return (
-    <aside className="hidden md:flex md:flex-shrink-0">
+    <aside className="hidden md:flex md:shrink-0">
       <div className="w-64 flex flex-col bg-white border-r border-gray-200">
         {/* Logo */}
         <div className="h-16 flex items-center px-6 border-b border-gray-200">

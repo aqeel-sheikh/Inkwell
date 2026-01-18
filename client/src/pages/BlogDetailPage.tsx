@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router'
 import { useBlogPost } from '@/features/blog/useBlog'
 import { CommentList } from '@/features/comments/CommentList'
 import { CommentForm } from '@/features/comments/CommentForm'

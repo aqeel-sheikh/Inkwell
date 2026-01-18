@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router'
 import { Navbar, Footer } from '@/components'
 import { HomePage } from '@/pages/HomePage'
 import { BlogDetailPage } from '@/pages/BlogDetailPage'

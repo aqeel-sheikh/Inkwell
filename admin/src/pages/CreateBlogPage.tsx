@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useCreateBlog } from "@/features/blogs/useBlogs";
 import { BlogForm } from "@/features/blogs/BlogForm";
 import { Card, CardBody, Button } from "@/components";

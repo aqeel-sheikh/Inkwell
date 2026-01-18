@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { useBlogPost, useUpdateBlog } from "@/features/blogs/useBlogs";
 import { BlogForm } from "@/features/blogs/BlogForm";
 import { Card, CardBody, Button, PageLoader } from "@/components";
