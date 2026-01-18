@@ -63,3 +63,20 @@ export const deleteUserPost = async (postId: string, userId: string) => {
     },
   });
 };
+
+export const selectDashboardStats = async (userId: string) => {
+  const stats = await prisma.blogPost.groupBy({
+    by: ["published"],
+    where: { authorId: userId },
+    _count: { _all: true },
+  });
+  const published = stats.find((s) => s.published)?._count._all ?? 0;
+  const drafts = stats.find((s) => !s.published)?._count._all ?? 0;
+
+  return {
+    totalPosts: published + drafts,
+    publishedPosts: published,
+    draftPosts: drafts,
+    totalViews: 0,
+  };
+};
