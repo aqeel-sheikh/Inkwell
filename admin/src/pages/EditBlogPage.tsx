@@ -3,6 +3,7 @@ import { useBlogPost, useUpdateBlog } from "@/features/blogs/useBlogs";
 import { BlogForm } from "@/features/blogs/BlogForm";
 import { Card, CardBody, Button, PageLoader } from "@/components";
 import type { CreateBlogDto } from "@/types";
+import { useState } from "react";
 
 export function EditBlogPage() {
   const { id } = useParams<{ id: string }>();
@@ -10,14 +11,21 @@ export function EditBlogPage() {
   const { data: post, isLoading } = useBlogPost(id!);
   const updateBlog = useUpdateBlog();
 
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [generalError, setGeneralError] = useState("");
+
   const handleSubmit = async (data: CreateBlogDto) => {
     if (!id) return;
 
     try {
       await updateBlog.mutateAsync({ id, ...data });
       navigate("/dashboard/blogs");
-    } catch (error) {
-      console.error("Failed to update blog:", error);
+    } catch (error: any) {
+      if (error.status === 400 && fieldErrors) {
+        setFieldErrors(error.fieldErrors);
+      } else {
+        setGeneralError(error.message);
+      }
     }
   };
 
@@ -51,11 +59,17 @@ export function EditBlogPage() {
       </div>
 
       <Card>
+        {generalError && (
+          <div className=" p-4 bg-danger-light/10 border border-danger-light rounded-lg">
+            <p className="text-sm text-danger-dark">{generalError}</p>
+          </div>
+        )}
         <CardBody>
           <BlogForm
             initialData={post}
             onSubmit={handleSubmit}
             isLoading={updateBlog.isPending}
+            errors={{ fieldErrors }}
           />
         </CardBody>
       </Card>

@@ -64,6 +64,7 @@ export function BlogForm({
         placeholder="Enter blog title"
         error={fieldErrors.title}
         required
+        minLength={4}
       />
 
       <Textarea
@@ -74,6 +75,7 @@ export function BlogForm({
         rows={3}
         error={fieldErrors.excerpt}
         required
+        minLength={10}
         helperText="This will be displayed in the blog list"
       />
 
