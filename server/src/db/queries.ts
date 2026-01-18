@@ -1,7 +1,7 @@
 import { prisma } from "@/config/prisma";
 import type { BlogPostType } from "@/types/posts.schema";
 import { customAlphabet } from "nanoid";
-import  slugify  from "slugify";
+import slugify from "slugify";
 
 interface SelectUserPosts {
   userId: string;
@@ -10,10 +10,10 @@ interface SelectUserPosts {
 }
 const nanoId = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 6);
 
-function generateSlug(title: string):string {
-  const baseSlug = slugify(title, {lower: true, strict: true})
-  const randomId = nanoId()
-  return `${baseSlug}-${randomId}`
+function generateSlug(title: string): string {
+  const baseSlug = slugify(title, { lower: true, strict: true });
+  const randomId = nanoId();
+  return `${baseSlug}-${randomId}`;
 }
 
 export const insertPost = async (postData: BlogPostType, userId: string) => {
@@ -91,28 +91,41 @@ export const selectDashboardStats = async (userId: string) => {
   };
 };
 
-export const selectPublishedPosts = async() =>{
+export const selectPublishedPosts = async () => {
   return await prisma.blogPost.findMany({
-    where:{
-      published: true
+    where: {
+      published: true,
     },
-    include:{
-      author:{
-        select: {name: true}
-      }
-    }
-  })
-}
-
-export const selectPublishedPostBySlug = async(slug: string) =>{
-  return await prisma.blogPost.findUnique({
-    where:{
-      slug
-    },
-    include:{
+    include: {
       author: {
-        select: {name: true}
-      }
-    }
-  })
-}
+        select: { name: true },
+      },
+    },
+  });
+};
+
+export const selectPublishedPostBySlug = async (slug: string) => {
+  return await prisma.blogPost.findUnique({
+    where: {
+      slug,
+    },
+    include: {
+      author: {
+        select: { name: true },
+      },
+    },
+  });
+};
+
+export const selectPublishedPostComments = async (postId: string) => {
+  return await prisma.blogComment.findMany({
+    where: {
+      postId,
+    },
+    include: {
+      author: {
+        select: { name: true },
+      },
+    },
+  });
+};

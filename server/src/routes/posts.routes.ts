@@ -6,7 +6,8 @@ import {
   editUserPost,
   removeUserPost,
   getPublishedPosts,
-  getPublishedPostBySlug
+  getPublishedPostBySlug,
+  getPublishedPostComments,
 } from "@/controllers/posts.controller";
 import { requireAuth } from "@/middleware/requireAuth.middleware";
 
@@ -21,7 +22,8 @@ postsRouter.patch("/api/posts/:postId", requireAuth, editUserPost);
 postsRouter.delete("/api/posts/:postId", requireAuth, removeUserPost);
 
 // Public
-postsRouter.get("/api/public/posts", getPublishedPosts)
-postsRouter.get("/api/public/posts/:slug", getPublishedPostBySlug)
+postsRouter.get("/api/public/posts", getPublishedPosts);
+postsRouter.get("/api/public/posts/:slug", getPublishedPostBySlug);
+postsRouter.get("/api/public/posts/:postId/comments", getPublishedPostComments);
 
 export { postsRouter };
