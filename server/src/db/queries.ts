@@ -29,3 +29,28 @@ export const selectUserPosts = async ({
     },
   });
 };
+
+export const selectUserPostDetails = async (userId: string, postId: string) => {
+  return await prisma.blogPost.findFirst({
+    where: {
+      id: postId,
+      authorId: userId,
+    },
+  });
+};
+
+export const updateUserPost = async (
+  postData: BlogPostType,
+  postId: string,
+  userId: string,
+) => {
+  return await prisma.blogPost.update({
+    where: {
+      id: postId,
+      authorId: userId,
+    },
+    data: {
+      ...postData,
+    },
+  });
+};
