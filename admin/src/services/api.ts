@@ -29,6 +29,8 @@ async function fetchApi<T>(url: string, options?: RequestInit): Promise<T> {
       credentials: "include", // Important for BetterAuth session cookies
     });
 
+    if (response.status === 204) return undefined as T;
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -49,7 +51,7 @@ async function fetchApi<T>(url: string, options?: RequestInit): Promise<T> {
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new Error("Network error occurred");
+    throw error;
   }
 }
 

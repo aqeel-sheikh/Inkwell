@@ -4,6 +4,7 @@ import {
   getUserPosts,
   getPostDetails,
   editUserPost,
+  removeUserPost,
 } from "@/controllers/posts.controller";
 import { requireAuth } from "@/middleware/requireAuth.middleware";
 
@@ -14,5 +15,7 @@ postsRouter.post("/api/posts", requireAuth, createPost);
 
 postsRouter.get("/api/posts/:postId", requireAuth, getPostDetails);
 postsRouter.patch("/api/posts/:postId", requireAuth, editUserPost);
+
+postsRouter.delete("/api/posts/:postId", requireAuth, removeUserPost);
 
 export { postsRouter };

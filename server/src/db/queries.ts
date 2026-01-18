@@ -30,7 +30,7 @@ export const selectUserPosts = async ({
   });
 };
 
-export const selectUserPostDetails = async (userId: string, postId: string) => {
+export const selectUserPostDetails = async (postId: string, userId: string) => {
   return await prisma.blogPost.findFirst({
     where: {
       id: postId,
@@ -51,6 +51,15 @@ export const updateUserPost = async (
     },
     data: {
       ...postData,
+    },
+  });
+};
+
+export const deleteUserPost = async (postId: string, userId: string) => {
+  await prisma.blogPost.delete({
+    where: {
+      id: postId,
+      authorId: userId,
     },
   });
 };

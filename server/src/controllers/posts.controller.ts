@@ -5,6 +5,7 @@ import {
   selectUserPosts,
   selectUserPostDetails,
   updateUserPost,
+  deleteUserPost,
 } from "@/db/queries";
 
 export const createPost = async (
@@ -56,12 +57,15 @@ export const getUserPosts = async (
   }
 };
 
-export const getPostDetails = async (req: Request, res: Response) => {
+export const getPostDetails = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   const userId = (req as any).userId;
   const postId = req.params.postId as string;
 
   try {
-    const post = await selectUserPostDetails(userId, postId);
+    const post = await selectUserPostDetails(postId, userId);
     return res.status(200).json(post);
   } catch (err) {
     console.error("Couldn't fetch the post details: ", err);
@@ -69,9 +73,14 @@ export const getPostDetails = async (req: Request, res: Response) => {
   }
 };
 
-export const editUserPost = async (req: Request, res: Response) => {
-  const userId = (req as any).userId;
+export const editUserPost = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   const postId = req.params.postId as string;
+  if (!postId) return res.status(404).json({ message: "Post not found!" });
+
+  const userId = (req as any).userId;
 
   const result = blogPostSchema.safeParse(req.body);
   if (!result.success) {
@@ -83,12 +92,32 @@ export const editUserPost = async (req: Request, res: Response) => {
   }
 
   try {
-    const data = await updateUserPost(result.data, postId, userId);
-    return res.status(200).json(data);
+    await updateUserPost(result.data, postId, userId);
+    return res.status(200).json({ message: "Post updated" });
   } catch (err) {
     console.error("Couldn't update user post: ", err);
     return res
       .status(500)
-      .json({ message: "Something went wrong! Failed update post details" });
+      .json({ message: "Something went wrong! Failed to update post details" });
+  }
+};
+
+export const removeUserPost = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
+  const postId = req.params.postId as string;
+  if (!postId) return res.status(404).json({ message: "Post not found!" });
+
+  const userId = (req as any).userId;
+
+  try {
+    await deleteUserPost(postId, userId);
+    return res.status(204).end();
+  } catch (err) {
+    console.error("Couldn't delete user post: ", err);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong! Failed to delete the post" });
   }
 };
