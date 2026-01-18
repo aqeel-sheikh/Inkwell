@@ -12,8 +12,7 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
-    "*.{ts,tsx}": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,css,md, jsx, tsx}": "prettier --write"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
