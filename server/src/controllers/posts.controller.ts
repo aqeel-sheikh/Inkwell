@@ -6,6 +6,8 @@ import {
   selectUserPostDetails,
   updateUserPost,
   deleteUserPost,
+  selectPublishedPosts,
+  selectPublishedPostBySlug,
 } from "@/db/queries";
 
 export const createPost = async (
@@ -121,3 +123,25 @@ export const removeUserPost = async (
       .json({ message: "Something went wrong! Failed to delete the post" });
   }
 };
+
+// Public
+export const getPublishedPosts = async(req: Request, res:Response): Promise<Response> =>{
+  try{
+    const posts = await selectPublishedPosts()
+    return res.status(200).json({data: posts})
+  }catch(err){
+    console.error("Couldn't fetch public publised posts: ", err)
+    return res.status(500).json("Something went wrong! Failed to get posts")
+  }
+}
+
+export const getPublishedPostBySlug = async(req: Request, res: Response):Promise<Response> =>{
+  const slug = req.params.slug as string;
+  try{
+    const post = await selectPublishedPostBySlug(slug);
+    return res.status(200).json(post)
+  }catch(err){
+    console.error("Couldn't fetch public post by slug: ", err)
+    return res.status(500).json({message: "Something went wrong! Failed to get post details"})
+  }
+}

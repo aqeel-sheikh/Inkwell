@@ -1,16 +1,26 @@
 import { prisma } from "@/config/prisma";
 import type { BlogPostType } from "@/types/posts.schema";
+import { customAlphabet } from "nanoid";
+import  slugify  from "slugify";
 
 interface SelectUserPosts {
   userId: string;
   page: number;
   limit: number;
 }
+const nanoId = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 6);
+
+function generateSlug(title: string):string {
+  const baseSlug = slugify(title, {lower: true, strict: true})
+  const randomId = nanoId()
+  return `${baseSlug}-${randomId}`
+}
 
 export const insertPost = async (postData: BlogPostType, userId: string) => {
   await prisma.blogPost.create({
     data: {
       ...postData,
+      slug: generateSlug(postData.title),
       authorId: userId,
     },
   });
@@ -80,3 +90,29 @@ export const selectDashboardStats = async (userId: string) => {
     totalViews: 0,
   };
 };
+
+export const selectPublishedPosts = async() =>{
+  return await prisma.blogPost.findMany({
+    where:{
+      published: true
+    },
+    include:{
+      author:{
+        select: {name: true}
+      }
+    }
+  })
+}
+
+export const selectPublishedPostBySlug = async(slug: string) =>{
+  return await prisma.blogPost.findUnique({
+    where:{
+      slug
+    },
+    include:{
+      author: {
+        select: {name: true}
+      }
+    }
+  })
+}

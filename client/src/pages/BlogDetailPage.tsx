@@ -8,11 +8,11 @@ import { ErrorMessage } from '@/components'
 export function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: post, isLoading, error, refetch } = useBlogPost(slug!)
-
+  
   if (isLoading) {
     return <PageLoader />
   }
-
+  
   if (error || !post) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -67,7 +67,7 @@ export function BlogDetailPage() {
           {/* Author & Date */}
           <div className="flex items-center gap-4 pb-8 mb-8 border-b border-brand-200 animate-fade-in animation-delay-400">
             <div className="flex items-center gap-3">
-              {post.author.avatar ? (
+              {post.author?.avatar ? (
                 <img
                   src={post.author.avatar}
                   alt={post.author.name}
@@ -100,11 +100,11 @@ export function BlogDetailPage() {
 
           {/* Content */}
           <div className="prose prose-lg max-w-none animate-fade-in animation-delay-600">
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            {post.content}
           </div>
 
           {/* Author Bio */}
-          {post.author.bio && (
+          {post?.author?.bio && (
             <div className="mt-16 p-8 bg-brand-100 rounded-xl border border-brand-200">
               <div className="flex items-start gap-4">
                 {post.author.avatar ? (
@@ -116,15 +116,15 @@ export function BlogDetailPage() {
                 ) : (
                   <div className="w-16 h-16 rounded-full bg-accent-lavender/20 flex items-center justify-center shrink-0">
                     <span className="text-accent-lavender font-semibold text-xl">
-                      {post.author.name.charAt(0).toUpperCase()}
+                      {post?.author?.name.charAt(0).toUpperCase()}
                     </span>
                   </div>
                 )}
                 <div>
                   <p className="font-display text-xl font-semibold text-brand-900 mb-2">
-                    About {post.author.name}
+                    About {post?.author?.name}
                   </p>
-                  <p className="text-brand-700 leading-relaxed">{post.author.bio}</p>
+                  <p className="text-brand-700 leading-relaxed">{post?.author?.bio}</p>
                 </div>
               </div>
             </div>
