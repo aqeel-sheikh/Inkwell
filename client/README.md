@@ -108,7 +108,7 @@ The client expects the following API endpoints:
 ## Design System
 
 ### Colors
-- **Brand**: Warm neutral palette (50-900)
+- **primary**: Warm neutral palette (50-900)
 - **Accent Coral**: `#ff6b6b` - Primary CTA color
 - **Accent Mint**: `#4ecdc4` - Secondary accent
 - **Accent Amber**: `#f7b731` - Tertiary accent

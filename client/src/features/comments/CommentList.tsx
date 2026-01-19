@@ -17,8 +17,8 @@ function CommentItem({ comment }: { comment: Comment }) {
   );
 
   return (
-    <div className="flex gap-4 p-6 bg-white rounded-lg border border-brand-200">
-      {comment.author.avatar ? (
+    <div className="flex gap-4 p-6 bg-white rounded-lg border border-primary-200">
+      {comment.author?.avatar ? (
         <img
           src={comment.author.avatar}
           alt={comment.author.name}
@@ -34,11 +34,13 @@ function CommentItem({ comment }: { comment: Comment }) {
 
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2 mb-2">
-          <p className="font-semibold text-brand-900">{comment.author.name}</p>
-          <span className="text-sm text-brand-500">·</span>
-          <p className="text-sm text-brand-500">{formattedDate}</p>
+          <p className="font-semibold text-primary-900">
+            {comment.author.name}
+          </p>
+          <span className="text-sm text-primary-500">·</span>
+          <p className="text-sm text-primary-500">{formattedDate}</p>
         </div>
-        <p className="text-brand-700 leading-relaxed whitespace-pre-wrap">
+        <p className="text-primary-700 leading-relaxed whitespace-pre-wrap">
           {comment.content}
         </p>
       </div>
@@ -64,7 +66,7 @@ export function CommentList({ postId }: CommentListProps) {
         message="Be the first to share your thoughts"
         icon={
           <svg
-            className="w-10 h-10 text-brand-400"
+            className="w-10 h-10 text-primary-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -83,7 +85,7 @@ export function CommentList({ postId }: CommentListProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="font-display text-2xl font-bold text-brand-900 mb-6">
+      <h3 className="font-display text-2xl font-bold text-primary-900 mb-6">
         Comments ({comments.length})
       </h3>
       {comments.map((comment) => (

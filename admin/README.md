@@ -221,7 +221,7 @@ The admin expects the following API endpoints:
 
 ### Colors
 
-- **Primary**: Blue (50-900) - Main brand color
+- **Primary**: Blue (50-900) - Main primary color
 - **Success**: Green - Published posts
 - **Warning**: Orange - Draft posts
 - **Danger**: Red - Delete actions

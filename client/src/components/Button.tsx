@@ -1,27 +1,40 @@
-import { ButtonHTMLAttributes, forwardRef } from 'react'
+import { ButtonHTMLAttributes, forwardRef } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
-  size?: 'sm' | 'md' | 'lg'
-  isLoading?: boolean
+  variant?: "primary" | "secondary" | "ghost" | "danger";
+  size?: "sm" | "md" | "lg";
+  isLoading?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = '', variant = 'primary', size = 'md', isLoading, children, disabled, ...props }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-coral'
-    
+  (
+    {
+      className = "",
+      variant = "primary",
+      size = "md",
+      isLoading,
+      children,
+      disabled,
+      ...props
+    },
+    ref,
+  ) => {
+    const baseStyles =
+      "inline-flex items-center justify-center font-medium transition-all duration-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-coral";
+
     const variants = {
-      primary: 'bg-accent-coral text-white hover:bg-accent-coral/90 shadow-sm hover:shadow-md',
-      secondary: 'bg-brand-200 text-brand-900 hover:bg-brand-300',
-      ghost: 'bg-transparent text-brand-700 hover:bg-brand-100',
-      danger: 'bg-red-500 text-white hover:bg-red-600',
-    }
+      primary:
+        "bg-accent-coral text-white hover:bg-accent-coral/90 shadow-sm hover:shadow-md",
+      secondary: "bg-primary-200 text-primary-900 hover:bg-primary-300",
+      ghost: "bg-transparent text-primary-700 hover:bg-primary-100",
+      danger: "bg-red-500 text-white hover:bg-red-600",
+    };
 
     const sizes = {
-      sm: 'px-3 py-1.5 text-sm',
-      md: 'px-5 py-2.5 text-base',
-      lg: 'px-6 py-3 text-lg',
-    }
+      sm: "px-3 py-1.5 text-sm",
+      md: "px-5 py-2.5 text-base",
+      lg: "px-6 py-3 text-lg",
+    };
 
     return (
       <button
@@ -39,8 +52,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           children
         )}
       </button>
-    )
-  }
-)
+    );
+  },
+);
 
-Button.displayName = 'Button'
+Button.displayName = "Button";

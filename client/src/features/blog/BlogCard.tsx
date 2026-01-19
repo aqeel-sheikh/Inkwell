@@ -1,26 +1,26 @@
-import { Link } from 'react-router'
-import type { BlogPost } from '@/types'
+import { Link } from "react-router";
+import type { BlogPost } from "@/types";
 
 interface BlogCardProps {
-  post: BlogPost
-  index?: number
+  post: BlogPost;
+  index?: number;
 }
 
 export function BlogCard({ post, index = 0 }: BlogCardProps) {
-  const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const formattedDate = new Date(post.createdAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
-    <article 
+    <article
       className="group animate-slide-up"
       style={{ animationDelay: `${index * 100}ms` }}
     >
       <Link to={`/blog/${post.slug}`} className="block">
         {post.coverImage && (
-          <div className="aspect-video mb-6 overflow-hidden rounded-lg bg-brand-200">
+          <div className="aspect-video mb-6 overflow-hidden rounded-lg bg-primary-200">
             <img
               src={post.coverImage}
               alt={post.title}
@@ -43,11 +43,11 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
             </div>
           )}
 
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-brand-900 group-hover:text-accent-coral transition-colors line-clamp-2">
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-primary-900 group-hover:text-accent-coral transition-colors line-clamp-2">
             {post.title}
           </h2>
 
-          <p className="text-brand-600 line-clamp-3 leading-relaxed">
+          <p className="text-primary-600 line-clamp-3 leading-relaxed">
             {post.excerpt}
           </p>
 
@@ -67,13 +67,15 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
                 </div>
               )}
               <div>
-                <p className="font-medium text-brand-900 text-sm">{post.author.name}</p>
-                <p className="text-brand-500 text-xs">{formattedDate}</p>
+                <p className="font-medium text-primary-900 text-sm">
+                  {post.author.name}
+                </p>
+                <p className="text-primary-500 text-xs">{formattedDate}</p>
               </div>
             </div>
           </div>
         </div>
       </Link>
     </article>
-  )
+  );
 }
