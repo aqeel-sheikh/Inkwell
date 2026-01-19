@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useSession, signOut } from "@/auth/authClient";
 import { useNavigate } from "react-router";
+import { Input } from "@/components/ui/input";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
-export function Header() {
+export const Header = () => {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -13,15 +15,24 @@ export function Header() {
   };
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
-      <div className="flex items-center gap-4">
-        <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
+    <nav className="flex flex-wrap items-center pt-2 px-4 pb-2 justify-between sticky top-0 backdrop-blur-md border-b md:rounded-t-xl">
+      <div className="flex items-center gap-5">
+        <SidebarTrigger />
+        <form className="flex items-center gap-2">
+          <Input
+            type="search"
+            name="searchGlobal"
+            id="searchGlobal"
+            placeholder="Search your posts"
+            className="min-w-0"
+          />
+        </form>
       </div>
 
       <div className="relative">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+          className="flex cursor-pointer items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
         >
           {session?.user.image ? (
             <img
@@ -60,13 +71,13 @@ export function Header() {
         {isMenuOpen && (
           <>
             <div
-              className="fixed inset-0 z-10"
+              className="fixed min-h-screen inset-0 z-10"
               onClick={() => setIsMenuOpen(false)}
             />
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
               <button
                 onClick={handleLogout}
-                className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                className="w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
               >
                 <svg
                   className="w-4 h-4"
@@ -87,6 +98,6 @@ export function Header() {
           </>
         )}
       </div>
-    </header>
+    </nav>
   );
-}
+};
