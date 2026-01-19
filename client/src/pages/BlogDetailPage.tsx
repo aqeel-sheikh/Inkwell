@@ -1,18 +1,22 @@
-import { useParams, Link } from 'react-router'
-import { useBlogPost } from '@/features/blog/useBlog'
-import { CommentList } from '@/features/comments/CommentList'
-import { CommentForm } from '@/features/comments/CommentForm'
-import { PageLoader } from '@/components/LoadingSpinner'
-import { ErrorMessage } from '@/components'
+import { useParams, Link } from "react-router";
+import { useBlogPost } from "@/features/blog/useBlog";
+import { CommentList } from "@/features/comments/CommentList";
+import { CommentForm } from "@/features/comments/CommentForm";
+import { PageLoader } from "@/components/LoadingSpinner";
+import { ErrorMessage } from "@/components";
+import { useSession } from "@/auth/auth-client";
 
 export function BlogDetailPage() {
-  const { slug } = useParams<{ slug: string }>()
-  const { data: post, isLoading, error, refetch } = useBlogPost(slug!)
-  
+  const { slug } = useParams<{ slug: string }>();
+  const { data: post, isLoading, error, refetch } = useBlogPost(slug!);
+  const { data } = useSession();
+
+  const isAthunticated = data?.session ? true : false;
+
   if (isLoading) {
-    return <PageLoader />
+    return <PageLoader />;
   }
-  
+
   if (error || !post) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -21,14 +25,14 @@ export function BlogDetailPage() {
           onRetry={() => refetch()}
         />
       </div>
-    )
+    );
   }
 
-  const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const formattedDate = new Date(post.createdAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <div className="min-h-screen">
@@ -37,10 +41,20 @@ export function BlogDetailPage() {
           {/* Back Navigation */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-brand-600 hover:text-accent-coral transition-colors mb-8 group"
+            className="inline-flex items-center gap-2 text-primary-600 hover:text-accent-coral transition-colors mb-8 group"
           >
-            <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Back to stories
           </Link>
@@ -60,12 +74,12 @@ export function BlogDetailPage() {
           )}
 
           {/* Title */}
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-brand-900 mb-6 leading-tight animate-fade-in animation-delay-200">
+          <h1 className="font-display text-4xl md:text-6xl font-bold text-primary-900 mb-6 leading-tight animate-fade-in animation-delay-200">
             {post.title}
           </h1>
 
           {/* Author & Date */}
-          <div className="flex items-center gap-4 pb-8 mb-8 border-b border-brand-200 animate-fade-in animation-delay-400">
+          <div className="flex items-center gap-4 pb-8 mb-8 border-b border-primary-200 animate-fade-in animation-delay-400">
             <div className="flex items-center gap-3">
               {post.author?.avatar ? (
                 <img
@@ -81,8 +95,10 @@ export function BlogDetailPage() {
                 </div>
               )}
               <div>
-                <p className="font-semibold text-brand-900">{post.author.name}</p>
-                <p className="text-sm text-brand-500">{formattedDate}</p>
+                <p className="font-semibold text-primary-900">
+                  {post.author.name}
+                </p>
+                <p className="text-sm text-primary-500">{formattedDate}</p>
               </div>
             </div>
           </div>
@@ -105,7 +121,7 @@ export function BlogDetailPage() {
 
           {/* Author Bio */}
           {post?.author?.bio && (
-            <div className="mt-16 p-8 bg-brand-100 rounded-xl border border-brand-200">
+            <div className="mt-16 p-8 bg-primary-100 rounded-xl border border-primary-200">
               <div className="flex items-start gap-4">
                 {post.author.avatar ? (
                   <img
@@ -121,10 +137,12 @@ export function BlogDetailPage() {
                   </div>
                 )}
                 <div>
-                  <p className="font-display text-xl font-semibold text-brand-900 mb-2">
+                  <p className="font-display text-xl font-semibold text-primary-900 mb-2">
                     About {post?.author?.name}
                   </p>
-                  <p className="text-brand-700 leading-relaxed">{post?.author?.bio}</p>
+                  <p className="text-primary-700 leading-relaxed">
+                    {post?.author?.bio}
+                  </p>
                 </div>
               </div>
             </div>
@@ -133,14 +151,14 @@ export function BlogDetailPage() {
       </article>
 
       {/* Comments Section */}
-      <section className="py-16 bg-brand-50 border-t border-brand-200">
+      <section className="py-16 bg-primary-50 border-t border-primary-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-8">
-            <CommentForm postId={post.id} isAuthenticated={false} />
+            <CommentForm postId={post.id} isAuthenticated={isAthunticated} />
             <CommentList postId={post.id} />
           </div>
         </div>
       </section>
     </div>
-  )
+  );
 }

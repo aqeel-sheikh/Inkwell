@@ -1,44 +1,58 @@
-import { useState } from 'react'
-import { useCreateComment } from './useComments'
-import { Button, Textarea } from '@/components'
+import { useState } from "react";
+import { useCreateComment } from "./useComments";
+import { Button, Textarea } from "@/components";
+import AuthModel from "@/components/AuthModel";
 
 interface CommentFormProps {
-  postId: string
-  isAuthenticated?: boolean
+  postId: string;
+  isAuthenticated?: boolean;
 }
 
-export function CommentForm({ postId, isAuthenticated = false }: CommentFormProps) {
-  const [content, setContent] = useState('')
-  const createComment = useCreateComment()
+export function CommentForm({
+  postId,
+  isAuthenticated = false,
+}: CommentFormProps) {
+  const [content, setContent] = useState("");
+  const createComment = useCreateComment();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!content.trim()) return
+    if (!content.trim()) return;
 
     try {
-      await createComment.mutateAsync({ content, postId })
-      setContent('')
+      await createComment.mutateAsync({ content, postId });
+      setContent("");
     } catch (error) {
-      console.error('Failed to create comment:', error)
+      console.error("Failed to create comment:", error);
     }
-  }
+  };
 
   if (!isAuthenticated) {
     return (
-      <div className="bg-brand-100 border border-brand-200 rounded-lg p-8 text-center">
-        <svg className="w-12 h-12 text-brand-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      <div className="bg-primary-100 border border-primary-200 rounded-lg p-8 text-center">
+        <svg
+          className="w-12 h-12 text-primary-400 mx-auto mb-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+          />
         </svg>
-        <h3 className="font-display text-xl font-semibold text-brand-900 mb-2">
+        <h3 className="font-display text-xl font-semibold text-primary-900 mb-2">
           Sign in to comment
         </h3>
-        <p className="text-brand-600 mb-4">
+        <p className="text-primary-600 mb-4">
           Join the conversation by logging in or creating an account
         </p>
-        <Button variant="primary">Sign In</Button>
+        <AuthModel />
       </div>
-    )
+    );
   }
 
   return (
@@ -66,5 +80,5 @@ export function CommentForm({ postId, isAuthenticated = false }: CommentFormProp
         </p>
       )}
     </form>
-  )
+  );
 }
