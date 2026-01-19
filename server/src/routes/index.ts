@@ -6,7 +6,7 @@ import { dashboardRouter } from "./dashboard.routes";
 const router = Router();
 
 router.use("/", rootRouter);
-router.use("/", dashboardRouter);
 router.use("/", postsRouter);
+router.use("/", dashboardRouter);
 
 export { router };
