@@ -129,3 +129,17 @@ export const selectPublishedPostComments = async (postId: string) => {
     },
   });
 };
+
+export const insertComment = async (
+  postId: string,
+  authorId: string,
+  content: string,
+) => {
+  await prisma.blogComment.create({
+    data: {
+      content,
+      postId,
+      authorId,
+    },
+  });
+};

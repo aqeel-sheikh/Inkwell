@@ -8,7 +8,6 @@ import {
   deleteUserPost,
   selectPublishedPosts,
   selectPublishedPostBySlug,
-  selectPublishedPostComments,
 } from "@/db/queries";
 
 export const createPost = async (
@@ -154,4 +153,3 @@ export const getPublishedPostBySlug = async (
       .json({ message: "Something went wrong! Failed to get post details" });
   }
 };
-
