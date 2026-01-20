@@ -4,6 +4,7 @@ export const signUpSchema = z
   .object({
     name: z.string().min(4, "Name should contain at least 4 characters"),
     email: z.email("Invalid email address"),
+    username: z.string().min(1, "Username is required"),
     password: z
       .string()
       .min(8, "Password should contain at least 8 characters"),

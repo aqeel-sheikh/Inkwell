@@ -3,18 +3,22 @@ import { useNavigate, Link } from "react-router";
 import { signUp } from "@/auth/authClient";
 import { Button, Input } from "@/components";
 import { signUpSchema } from "@/schemas/userData.schema";
+import { Check } from "lucide-react";
+import { useUsernameValidation } from "@/hooks/useUsernameValidation";
 
 export function RegisterPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [zodErrors, setZodErrors] = useState<Record<string, string>>({});
+  const { usernameError, isValid } = useUsernameValidation(formData.username);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +42,7 @@ export function RegisterPage() {
       {
         name: formData.name,
         email: formData.email,
+        username: formData.username,
         password: formData.password,
       },
       {
@@ -101,10 +106,37 @@ export function RegisterPage() {
               }
               placeholder="John Doe"
               required
+              autoComplete="name"
             />
             {zodErrors.name && (
               <p className="text-sm text-danger-dark">{zodErrors.name}</p>
             )}
+            <div className="relative">
+              <Input
+                label="Username"
+                type="text"
+                value={formData.username}
+                onChange={(e) => {
+                  setFormData({ ...formData, username: e.target.value });
+                }}
+                placeholder="john123"
+                required
+                error={usernameError}
+              />
+              {zodErrors.name && (
+                <p className="text-sm text-danger-dark">{zodErrors.name}</p>
+              )}
+              {isValid && (
+                <div className="pointer-events-none absolute inset-y-13 end-0 flex items-center justify-center pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                  <Check
+                    size={16}
+                    strokeWidth={2}
+                    className="text-emerald-500"
+                    aria-hidden="true"
+                  />
+                </div>
+              )}
+            </div>
 
             <Input
               label="Email"
@@ -113,7 +145,7 @@ export function RegisterPage() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              placeholder="you@example.com"
+              placeholder="yourname@example.com"
               required
             />
             {zodErrors.email && (

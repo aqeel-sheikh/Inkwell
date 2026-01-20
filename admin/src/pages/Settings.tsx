@@ -12,7 +12,9 @@ function Settings() {
   const id = useId();
   const userData = useSession().data?.user;
 
-  const [firstName, lastName] = userData?.name?.split(" ") ?? [];
+  const fullName = userData?.name?.split(" ") ?? [];
+  const firstName = fullName[0];
+  const lastName = fullName[-1];
 
   const maxLength = 180;
   const {
