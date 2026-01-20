@@ -15,7 +15,7 @@ export const Header = () => {
   };
 
   return (
-    <nav className="flex flex-wrap items-center pt-2 px-4 pb-2 justify-between sticky top-0 backdrop-blur-md border-b md:rounded-t-xl">
+    <nav className="flex flex-wrap items-center pt-2 px-4 pb-2 justify-between sticky top-0 z-50 backdrop-blur-md border-b md:rounded-t-xl">
       <div className="flex items-center gap-5">
         <SidebarTrigger />
         <form className="flex items-center gap-2">

@@ -2,13 +2,17 @@ import { createBrowserRouter, type RouteObject } from "react-router";
 import { Navigate } from "react-router";
 import App from "./App";
 import { ProtectedRoute } from "@/auth/ProtectedRoute";
-import { LoginPage } from "@/pages/LoginPage";
-import { RegisterPage } from "@/pages/RegisterPage";
-import { DashboardLayout } from "@/pages/DashboardLayout";
-import { DashboardPage } from "@/pages/DashboardPage";
-import { BlogListPage } from "@/pages/BlogListPage";
-import { CreateBlogPage } from "@/pages/CreateBlogPage";
-import { EditBlogPage } from "@/pages/EditBlogPage";
+
+import {
+  LoginPage,
+  RegisterPage,
+  DashboardLayout,
+  DashboardPage,
+  BlogListPage,
+  CreateBlogPage,
+  EditBlogPage,
+  Settings,
+} from "@/pages";
 
 const routes: RouteObject[] = [
   {
@@ -27,6 +31,7 @@ const routes: RouteObject[] = [
           { path: "blogs", element: <BlogListPage /> },
           { path: "blogs/new", element: <CreateBlogPage /> },
           { path: "blogs/:id/edit", element: <EditBlogPage /> },
+          { path: "settings", element: <Settings /> },
         ],
       },
       {

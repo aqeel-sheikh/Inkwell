@@ -25,7 +25,7 @@ const items = [
   },
   {
     name: "Settings",
-    path: "#",
+    path: "/dashboard/settings",
     icon: Settings,
   },
 ];
