@@ -14,7 +14,7 @@ function Settings() {
 
   const fullName = userData?.name?.split(" ") ?? [];
   const firstName = fullName[0];
-  const lastName = fullName[-1];
+  const lastName = fullName.length > 1 ? fullName.at(-1) : "";
 
   const maxLength = 180;
   const {
