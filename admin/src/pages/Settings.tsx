@@ -1,3 +1,4 @@
+import { useSession } from "@/auth/authClient";
 import { useCharacterLimit } from "@/hooks/use-character-limit";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,9 @@ import { useId, useState } from "react";
 
 function Settings() {
   const id = useId();
+  const userData = useSession().data?.user;
+
+  const [firstName, lastName] = userData?.name?.split(" ") ?? [];
 
   const maxLength = 180;
   const {
@@ -18,15 +22,14 @@ function Settings() {
     maxLength: limit,
   } = useCharacterLimit({
     maxLength,
-    initialValue:
-      "Hey, I am Margaret, a web developer who loves turning ideas into amazing websites!",
+    initialValue: userData?.bio || "",
   });
 
   return (
     <div className="flex flex-col p-0 sm:max-w-zlg">
       <div>
-        <ProfileBg defaultImage="#" />
-        <Avatar defaultImage="#" />
+        <ProfileBg defaultImage={userData?.coverImage || ""} />
+        <Avatar defaultImage={userData?.image || ""} />
         <div className="px-6 pb-6 pt-4">
           <form className="space-y-4">
             {/* Name */}
@@ -36,8 +39,7 @@ function Settings() {
                 <Label htmlFor={`${id}-first-name`}>First name</Label>
                 <Input
                   id={`${id}-first-name`}
-                  placeholder="Matt"
-                  defaultValue="Margaret"
+                  defaultValue={firstName}
                   type="text"
                   required
                 />
@@ -47,8 +49,7 @@ function Settings() {
                 <Label htmlFor={`${id}-last-name`}>Last name</Label>
                 <Input
                   id={`${id}-last-name`}
-                  placeholder="Welsh"
-                  defaultValue="Villard"
+                  defaultValue={lastName}
                   type="text"
                   required
                 />
@@ -64,7 +65,7 @@ function Settings() {
                     id={`${id}-username`}
                     className="peer pe-9"
                     placeholder="Username"
-                    defaultValue="margaret-villard-69"
+                    defaultValue={userData?.username}
                     type="text"
                     required
                   />
@@ -86,7 +87,7 @@ function Settings() {
                     id={`${id}-email`}
                     className="peer pe-9"
                     placeholder="you@example.com"
-                    defaultValue="you@example.com"
+                    defaultValue={userData?.email}
                     type="email"
                     required
                   />
@@ -112,7 +113,7 @@ function Settings() {
                   id={`${id}-website`}
                   className="-ms-px rounded-s-none shadow-none"
                   placeholder="yourwebsite.com"
-                  defaultValue="www.margaret.com"
+                  defaultValue={userData?.website || ""}
                   type="text"
                 />
               </div>
