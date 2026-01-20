@@ -14,4 +14,25 @@ export const auth = betterAuth({
     process.env.ADMIN_FRONTEND_URL!,
     process.env.CLIENT_FRONTEND_URL!,
   ],
+  user: {
+    additionalFields: {
+      username: {
+        type: "string",
+        required: true,
+        unique: true,
+      },
+      website: {
+        type: "string",
+        required: false,
+      },
+      bio: {
+        type: "string",
+        required: false,
+      },
+      coverImage: {
+        type: "string",
+        required: false,
+      },
+    },
+  },
 });
