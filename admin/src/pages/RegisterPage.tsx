@@ -123,8 +123,8 @@ export function RegisterPage() {
                 required
                 error={usernameError}
               />
-              {zodErrors.name && (
-                <p className="text-sm text-danger-dark">{zodErrors.name}</p>
+              {zodErrors.username && (
+                <p className="text-sm text-danger-dark">{zodErrors.username}</p>
               )}
               {isValid && (
                 <div className="pointer-events-none absolute inset-y-13 end-0 flex items-center justify-center pe-3 text-muted-foreground/80 peer-disabled:opacity-50">

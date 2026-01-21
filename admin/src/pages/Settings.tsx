@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/Textarea";
 import { Check, ImagePlus, Trash } from "lucide-react";
 import { useUpdateUser } from "@/features/user/useUser";
+import { useUsernameValidation } from "@/hooks/useUsernameValidation";
 
 function Settings() {
   const id = useId();
@@ -32,6 +33,8 @@ function Settings() {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState("");
+
+  const { usernameError, isValid } = useUsernameValidation(formData.username);
 
   useEffect(() => {
     if (userData) {
@@ -158,16 +161,23 @@ function Settings() {
                     name="username"
                     onChange={handleOnChange}
                     required
-                    error={fieldErrors.username}
+                    error={usernameError}
                   />
-                  <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
-                    <Check
-                      size={16}
-                      strokeWidth={2}
-                      className="text-emerald-500"
-                      aria-hidden="true"
-                    />
-                  </div>
+                  {fieldErrors.username && (
+                    <p className="text-sm text-danger-dark">
+                      {fieldErrors.username}
+                    </p>
+                  )}
+                  {isValid && (
+                    <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                      <Check
+                        size={16}
+                        strokeWidth={2}
+                        className="text-emerald-500"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               {/* Email */}
