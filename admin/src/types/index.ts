@@ -1,9 +1,12 @@
 export interface User {
   id: string;
   name: string;
+  username: string;
   email: string;
-  avatar?: string;
-  createdAt: string;
+  image?: string;
+  coverImage?: string;
+  website?: string;
+  bio?: string;
 }
 
 export interface BlogPost {
@@ -27,6 +30,16 @@ export interface CreateBlogDto {
   coverImage?: string;
   published: boolean;
   tags?: string[];
+}
+
+export interface UserDto {
+  name: string;
+  username: string;
+  email: string;
+  image?: string;
+  coverImage?: string;
+  website?: string;
+  bio?: string;
 }
 
 export interface UpdateBlogDto extends Partial<CreateBlogDto> {

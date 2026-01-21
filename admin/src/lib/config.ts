@@ -20,4 +20,7 @@ export const API_ENDPOINTS = {
   dashboard: {
     stats: () => `${API_BASE_URL}/dashboard/stats`,
   },
+  user: {
+    update: () => `${API_BASE_URL}/me`,
+  },
 } as const;

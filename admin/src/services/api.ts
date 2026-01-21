@@ -5,6 +5,7 @@ import type {
   UpdateBlogDto,
   PaginatedResponse,
   DashboardStats,
+  User,
 } from "@/types";
 
 class ApiError extends Error {
@@ -94,6 +95,14 @@ export const api = {
   dashboard: {
     getStats: async (): Promise<DashboardStats> => {
       return fetchApi(API_ENDPOINTS.dashboard.stats());
+    },
+  },
+  user: {
+    update: async ({ ...data }: User): Promise<User> => {
+      return fetchApi(API_ENDPOINTS.user.update(), {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      });
     },
   },
 };
