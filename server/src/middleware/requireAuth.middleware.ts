@@ -16,6 +16,7 @@ export const requireAuth = async (
       return;
     }
     (req as any).userId = session.user.id;
+    (req as any).username = session.user.username;
     next();
   } catch (error) {
     console.error("Invalid session", error);
