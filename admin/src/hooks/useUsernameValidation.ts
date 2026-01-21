@@ -52,7 +52,9 @@ export function useUsernameValidation(
     setUsernameError("");
 
     try {
-      const res = await fetch(`${apiUrl}?username=${username}`);
+      const res = await fetch(`${apiUrl}?username=${username}`, {
+        credentials: "include"
+      });
       const { exists, message } = await res.json();
 
       if (res.status === 409 && exists) {

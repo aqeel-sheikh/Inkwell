@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import { selectCheckUsername, updateUser } from "@/db/queries";
 import { UserSchema, type UserDto, type User } from "@/types/users.schema";
+import { fromNodeHeaders } from "better-auth/node";
+import { auth } from "@/lib/auth";
 
 export const checkUsername = async (
   req: Request,
@@ -18,19 +20,20 @@ export const checkUsername = async (
   }
 
   try {
-    const exists = await selectCheckUsername(username);
-    if (exists) {
-      return res
-        .status(409)
-        .json({ exists, message: "Username already exists!" });
+    const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
+    if (session) {
+      const currentUsername = session.user.username;
+      if (currentUsername !== username) return doUsernameCheck(username, res);
+      return res.status(200);
     } else {
-      return res.status(200).json({ exists });
+      console.log(session);
+      return doUsernameCheck(username, res);
     }
-  } catch (err) {
-    console.error("Couldn't check username: ", err);
-    return res
-      .status(500)
-      .json({ message: "Something went wrong! Failed to check username" });
+  } catch (error) {
+    console.error("Invalid session", error);
+    return res.status(401).json({ message: "Unauthorized" });
   }
 };
 
@@ -57,11 +60,11 @@ export const updateUserProfile = async (
       .json({ message: "You are not allowed to modify this resource" });
   }
 
-  try {
-    const username = userData.username;
-    if (!username)
-      return res.status(404).json({ message: "Please provide a username" });
+  const username = userData.username;
+  if (!username)
+    return res.status(404).json({ message: "Please provide a username" });
 
+  try {
     if (username !== currentUsername) {
       if (!/^[a-zA-Z0-9_]+$/.test(username)) {
         return res.status(400).json({
@@ -91,3 +94,25 @@ export const updateUserProfile = async (
       .json({ message: "Something went wrong! Failed to update profile" });
   }
 };
+
+// Helper
+async function doUsernameCheck(
+  username: string,
+  res: Response,
+): Promise<Response> {
+  try {
+    const exists = await selectCheckUsername(username);
+    if (exists) {
+      return res
+        .status(409)
+        .json({ exists, message: "Username already exists!" });
+    } else {
+      return res.status(200).json({ exists });
+    }
+  } catch (err) {
+    console.error("Couldn't check username: ", err);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong! Failed to check username" });
+  }
+}
