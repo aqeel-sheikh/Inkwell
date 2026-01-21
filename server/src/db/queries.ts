@@ -1,5 +1,6 @@
 import { prisma } from "@/config/prisma";
 import type { BlogPostType } from "@/types/posts.schema";
+import type { User } from "@/types/users.schema";
 import { customAlphabet } from "nanoid";
 import slugify from "slugify";
 
@@ -151,4 +152,15 @@ export const selectCheckUsername = async (username: string) => {
     },
   });
   return user ? true : false;
+};
+
+export const updateUser = async (user: User, id: string) => {
+  const updatedUser = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      ...user,
+    },
+  });
 };
