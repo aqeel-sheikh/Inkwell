@@ -28,7 +28,6 @@ export const checkUsername = async (
       if (currentUsername !== username) return doUsernameCheck(username, res);
       return res.status(200);
     } else {
-      console.log(session);
       return doUsernameCheck(username, res);
     }
   } catch (error) {

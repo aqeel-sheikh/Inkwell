@@ -28,7 +28,7 @@ export const createPost = async (
     await insertPost(result.data, userId);
     return res.status(201).json({ message: "Post Created" });
   } catch (err: unknown) {
-    console.log("Post insertion failed: ", err);
+    console.error("Post insertion failed: ", err);
     return res.status(500).json({
       message: "Something went wrong! Please try again after sometime",
     });
@@ -54,7 +54,7 @@ export const getUserPosts = async (
       totalPages: Math.ceil(total / limit),
     });
   } catch (err) {
-    console.log("Post fetch failed: ", err);
+    console.error("Post fetch failed: ", err);
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
