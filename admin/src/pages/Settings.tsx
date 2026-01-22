@@ -41,12 +41,13 @@ function Settings() {
       const fullName = userData?.name?.split(" ") ?? [];
       const firstName = fullName[0];
       const lastName = (fullName.length > 1 && fullName.at(-1)) || "";
+      const website = userData.website?.substring(8);
       setFormData({
         username: userData.username || "",
         email: userData.email || "",
         image: userData.image || "",
         coverImage: userData.coverImage || "",
-        website: userData.website || "",
+        website: website || "",
         bio: userData.bio || "",
       });
       setFullName({
@@ -98,7 +99,12 @@ function Settings() {
     if (!id) return;
 
     try {
-      await updateUser.mutateAsync({ id, name, ...formData });
+      await updateUser.mutateAsync({
+        ...formData,
+        website: `https://${formData.website}`,
+        id,
+        name,
+      });
     } catch (err: any) {
       if (err.status === 400 && fieldErrors) {
         setFieldErrors(err.fieldErrors);
