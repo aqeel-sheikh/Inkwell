@@ -14,7 +14,6 @@ function Settings() {
   const id = useId();
   const userData = useSession().data?.user;
   const updateUser = useUpdateUser();
-
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -92,6 +91,30 @@ function Settings() {
     }));
   };
 
+  const handleOnReset = () => {
+    if (userData) {
+      const fullName = userData?.name?.split(" ") ?? [];
+      const firstName = fullName[0];
+      const lastName = (fullName.length > 1 && fullName.at(-1)) || "";
+      const website = userData.website?.substring(8);
+      setFormData({
+        username: userData.username || "",
+        email: userData.email || "",
+        image: userData.image || "",
+        coverImage: userData.coverImage || "",
+        website: website || "",
+        bio: userData.bio || "",
+      });
+      setFullName({
+        firstName,
+        lastName,
+      });
+      handleChange({
+        target: { value: userData.bio || "" },
+      } as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const id = userData?.id;
@@ -122,7 +145,11 @@ function Settings() {
         <ProfileBg defaultImage={formData?.coverImage || ""} />
         <Avatar defaultImage={formData?.image || ""} />
         <div className="px-6 pb-6 pt-4">
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form
+            className="space-y-4"
+            onSubmit={handleSubmit}
+            onReset={handleOnReset}
+          >
             {/* Name */}
             <div className="flex flex-col gap-4 sm:flex-row">
               {/* First Name */}
