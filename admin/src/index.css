@@ -286,6 +286,11 @@
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 }
 
 @theme inline {
