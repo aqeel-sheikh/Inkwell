@@ -43,42 +43,6 @@ export function BlogListPage() {
 
   return (
     <>
-      {/* Css styles for this component */}
-      <style>{`
-        .bg-size-200 {
-          background-size: 200% auto;
-        }
-        
-        .text-baslance {
-          text-wrap: balance;
-        }
-        
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        
-        .line-clamp-3 {
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        
-        .glass-effect {
-          background: rgba(255, 255, 255, 0.7);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-        }
-        
-        .text-shadow-sm {
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        
-      `}</style>
-
       <div
         className="relative min-h-screen bg-[#fafaf9]"
         style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
@@ -100,7 +64,7 @@ export function BlogListPage() {
         </div>
 
         {/* Content Container */}
-        <div className="relative mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
+        <div className="relative mx-auto max-w-[1300px] px-6 py-16 sm:px-8 lg:px-12">
           {/* Header Section */}
           <header
             className="mb-16 animate-fadeInUp"
@@ -146,7 +110,7 @@ export function BlogListPage() {
                     </svg>
                     <span>New Post</span>
                   </span>
-                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent bg-size-200 opacity-0 transition-opacity duration-500 group-hover:animate-shimmer group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent bg-size-[200%_auto] opacity-0 transition-opacity duration-500 group-hover:animate-shimmer group-hover:opacity-100" />
                 </Button>
               </Link>
             </div>
