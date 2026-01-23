@@ -9,6 +9,7 @@ import { Textarea } from "@/components/Textarea";
 import { Check, ImagePlus, Trash } from "lucide-react";
 import { useUpdateUser } from "@/features/user/useUser";
 import { useUsernameValidation } from "@/hooks/useUsernameValidation";
+import { UserSchema } from "@/schemas/userData.schema";
 
 function Settings() {
   const id = useId();
@@ -50,8 +51,8 @@ function Settings() {
         bio: userData.bio || "",
       });
       setFullName({
-        firstName,
-        lastName,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
       });
     }
   }, [userData]);
@@ -121,15 +122,27 @@ function Settings() {
 
     if (!id) return;
 
-    try {
-      await updateUser.mutateAsync({
-        ...formData,
-        website: `https://${formData.website}`,
-        id,
-        name,
+    const data = {
+      ...formData,
+      website: `https://${formData.website}`,
+      id,
+      name,
+    };
+
+    const result = UserSchema.safeParse(data);
+    if (!result.success) {
+      const fErrors: Record<string, string> = {};
+      result.error.issues.forEach((err) => {
+        if (err.path[0]) fErrors[err.path[0] as string] = err.message;
       });
+      setFieldErrors(fErrors);
+      return;
+    }
+
+    try {
+      await updateUser.mutateAsync(data);
     } catch (err: any) {
-      if (err.status === 400 && fieldErrors) {
+      if (err.status === 400) {
         setFieldErrors(err.fieldErrors);
       } else if (err.status === 409) {
         setFieldErrors((prev) => ({ ...prev, username: err.message }));
@@ -215,7 +228,7 @@ function Settings() {
                     </h2>
                   </div>
 
-                  <div className="grid gap-6 sm:grid-cols-2">
+                  <div className="grid gap-6 sm:gap-x-6 sm:gap-y-1 sm:grid-cols-2">
                     {/* First Name */}
                     <div className="space-y-2">
                       <Label
@@ -231,7 +244,6 @@ function Settings() {
                         name="firstName"
                         onChange={handleNameOnChange}
                         required
-                        error={fieldErrors.name}
                         className="border-stone-200 bg-white/80 transition-all duration-300 focus:border-stone-400 focus:bg-white"
                       />
                     </div>
@@ -251,10 +263,12 @@ function Settings() {
                         onChange={handleNameOnChange}
                         type="text"
                         required
-                        error={fieldErrors.name}
                         className="border-stone-200 bg-white/80 transition-all duration-300 focus:border-stone-400 focus:bg-white"
                       />
                     </div>
+                    <span className="text-sm text-danger">
+                      {fieldErrors?.name && `${fieldErrors.name}`}
+                    </span>
                   </div>
                 </div>
 
