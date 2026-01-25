@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { useBlogPosts, useDeleteBlog } from "@/features/blogs/useBlogs";
+import {
+  useBlogPosts,
+  useDeleteBlog,
+  useChangePublishStatus,
+} from "@/features/blogs/useBlogs";
 import {
   Card,
   CardBody,
@@ -15,6 +19,7 @@ export function BlogListPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading } = useBlogPosts(currentPage, 10);
   const deleteBlog = useDeleteBlog();
+  const changePostPublishStatus = useChangePublishStatus();
 
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
@@ -35,6 +40,14 @@ export function BlogListPage() {
     }
   };
 
+  const handleChangeStatus = async (postId: string, publishStatus: boolean) => {
+    try {
+      await changePostPublishStatus.mutateAsync({ postId, publishStatus });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#fafaf9]">
@@ -52,6 +65,17 @@ export function BlogListPage() {
 
   return (
     <>
+      <style>
+        {`
+        .status-btn:hover .published{
+        border-color: #00bc7d
+        }
+        .status-btn:hover .draft{
+        border-color: #fe9a00
+        }
+        
+        `}
+      </style>
       <div
         className="relative min-h-screen bg-[#fafaf9]"
         style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
@@ -231,12 +255,17 @@ export function BlogListPage() {
 
                       <CardBody className="relative flex h-full flex-col gap-6 p-8">
                         {/* Status Badge */}
-                        <div className="flex items-start justify-between">
+                        <button
+                          onClick={() =>
+                            handleChangeStatus(post.id, post.published)
+                          }
+                          className="status-btn flex items-start justify-between cursor-pointer w-fit"
+                        >
                           <span
                             className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] shadow-sm transition-all duration-300 ${
                               post.published
-                                ? "border border-emerald-200/80 bg-emerald-50/80 text-emerald-700"
-                                : "border border-amber-200/80 bg-amber-50/80 text-amber-700"
+                                ? "border border-emerald-200/80 bg-emerald-50/80 text-emerald-700 published"
+                                : "border border-amber-200/80 bg-amber-50/80 text-amber-700 draft"
                             }`}
                           >
                             <span
@@ -244,7 +273,7 @@ export function BlogListPage() {
                             />
                             {post.published ? "Published" : "Draft"}
                           </span>
-                        </div>
+                        </button>
 
                         {/* Title */}
                         <h2

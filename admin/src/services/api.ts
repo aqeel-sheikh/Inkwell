@@ -6,6 +6,7 @@ import type {
   PaginatedResponse,
   DashboardStats,
   User,
+  ChangePublishStatusDto,
 } from "@/types";
 
 class ApiError extends Error {
@@ -88,6 +89,16 @@ export const api = {
     delete: async (id: string): Promise<void> => {
       return fetchApi(API_ENDPOINTS.posts.delete(id), {
         method: "DELETE",
+      });
+    },
+
+    changePublishStatus: async ({
+      postId,
+      publishStatus,
+    }: Omit<ChangePublishStatusDto, "id">): Promise<BlogPost> => {
+      return fetchApi(API_ENDPOINTS.posts.changePublishStatus(postId), {
+        method: "PATCH",
+        body: JSON.stringify({ postId, publishStatus }),
       });
     },
   },

@@ -46,6 +46,12 @@ export interface UpdateBlogDto extends Partial<CreateBlogDto> {
   id: string;
 }
 
+export interface ChangePublishStatusDto {
+  id: string;
+  postId: string;
+  publishStatus: boolean;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   page: number;

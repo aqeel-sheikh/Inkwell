@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/services/api";
-import type { CreateBlogDto, UpdateBlogDto } from "@/types";
+import type {
+  CreateBlogDto,
+  UpdateBlogDto,
+  ChangePublishStatusDto,
+} from "@/types";
 
 export function useBlogPosts(page = 1, limit = 20) {
   return useQuery({
@@ -37,6 +41,22 @@ export function useUpdateBlog() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["admin-posts"] });
       queryClient.invalidateQueries({ queryKey: ["admin-post", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
+    },
+  });
+}
+
+export function useChangePublishStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: Omit<ChangePublishStatusDto, "id">) =>
+      api.posts.changePublishStatus(data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-posts"] });
+      queryClient.invalidateQueries({
+        queryKey: ["admin-post", variables.postId],
+      });
       queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
     },
   });
