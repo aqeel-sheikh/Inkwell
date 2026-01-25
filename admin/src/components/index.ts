@@ -1,6 +1,6 @@
 export { Button } from "./ui/button";
 export { Input } from "./ui/input";
-export { Textarea } from "./Textarea";
+export { Textarea } from "./ui/textarea";
 export { Card, CardHeader, CardBody } from "./Card";
 export { LoadingSpinner, PageLoader } from "./LoadingSpinner";
 export { AppSidebar } from "./AppSidebar";

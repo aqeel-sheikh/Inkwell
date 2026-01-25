@@ -5,7 +5,7 @@ import { useImageUpload } from "@/hooks/use-image-upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/Textarea";
+import { Textarea } from "@/components/ui/textarea";
 import { Check, ImagePlus, Trash } from "lucide-react";
 import { useUpdateUser } from "@/features/user/useUser";
 import { useUsernameValidation } from "@/hooks/useUsernameValidation";
