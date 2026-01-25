@@ -54,6 +54,10 @@ export function AppSidebar() {
         .menu-item:hover .menu-icon {
           transform: scale(1.1);
         }
+        /* Logout button */
+        .logout:hover .logout-icon{
+          transform: scale(1.1);
+        }
       `}</style>
 
       <Sidebar
@@ -131,9 +135,12 @@ export function AppSidebar() {
               <SidebarMenuButton
                 onClick={handleLogout}
                 tooltip={"Logout"}
-                className="flex px-4 rounded-xl text-stone-600 transition-all duration-300 hover:text-red-600 cursor-pointer"
+                className="logout flex font-medium px-4 rounded-xl text-stone-600 transition-all duration-300 hover:text-stone-900 cursor-pointer"
               >
-                <LogOut className="h-4 w-4" strokeWidth={2} />
+                <LogOut
+                  className="logout-icon h-4 w-4 transition-all duration-300 will-change-transform"
+                  strokeWidth={2}
+                />
                 <span className="">Logout</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
