@@ -33,11 +33,11 @@ export const Header = () => {
         }
       `}</style>
 
-      <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between border-b border-stone-200/60 bg-white/95 px-6 py-4 backdrop-blur-xl md:rounded-t-xl">
+      <nav className="sticky top-0 z-50 flex flex-wrap gap-4 items-center justify-between border-b border-stone-200/60 bg-white/95 px-6 py-4 backdrop-blur-xl md:rounded-t-xl">
         <div className="flex items-center gap-5">
           <SidebarTrigger />
 
-          <form className="flex items-center gap-2">
+          <form className=" items-center gap-2 hidden md:flex">
             <div className="relative">
               <svg
                 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400"
@@ -64,7 +64,7 @@ export const Header = () => {
           </form>
         </div>
 
-        <div className="relative">
+        <div className="relative ml-auto">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="flex cursor-pointer items-center gap-3 rounded-xl border border-stone-200/60 bg-white/80 px-3 py-2 transition-all duration-300 hover:border-stone-300 "
@@ -87,7 +87,7 @@ export const Header = () => {
             </div>
 
             {/* User Info */}
-            <div className="hidden text-left sm:block">
+            <div className="block text-left max-[400px]:hidden">
               <p
                 className="text-sm font-medium text-stone-900"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
