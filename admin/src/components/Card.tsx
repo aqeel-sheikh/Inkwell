@@ -1,8 +1,10 @@
 import { HTMLAttributes } from "react";
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {}
-
-export function Card({ className = "", children, ...props }: CardProps) {
+export function Card({
+  className = "",
+  children,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={`card ${className}`} {...props}>
       {children}
