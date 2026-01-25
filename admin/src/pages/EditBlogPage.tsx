@@ -1,10 +1,9 @@
 import { useNavigate, useParams } from "react-router";
 import { useBlogPost, useUpdateBlog } from "@/features/blogs/useBlogs";
 import { BlogForm } from "@/features/blogs/BlogForm";
-import { Card, CardBody, Button, PageLoader } from "@/components";
+import { Button, PageLoader } from "@/components";
 import type { CreateBlogDto } from "@/types";
 import { useState } from "react";
-import { Link } from "react-router";
 
 export function EditBlogPage() {
   const { id } = useParams<{ id: string }>();
@@ -51,6 +50,7 @@ export function EditBlogPage() {
       onSubmit={handleSubmit}
       isLoading={updateBlog.isPending}
       errors={{ fieldErrors }}
+      generalError={generalError}
       onCancel={() => navigate("/dashboard/blogs")}
     />
   );
