@@ -9,9 +9,11 @@ import {
   EmptyState,
   Modal,
 } from "@/components";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function BlogListPage() {
-  const { data, isLoading } = useBlogPosts();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading } = useBlogPosts(currentPage, 10);
   const deleteBlog = useDeleteBlog();
 
   const [deleteModal, setDeleteModal] = useState({
@@ -40,6 +42,13 @@ export function BlogListPage() {
       </div>
     );
   }
+
+  const handleNext = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+  const handlePrev = () => {
+    setCurrentPage((prev) => prev - 1);
+  };
 
   return (
     <>
@@ -174,15 +183,31 @@ export function BlogListPage() {
                 <div className="flex items-center gap-3">
                   <div className="rounded-xl border border-stone-200 bg-white/80 px-5 py-2.5 shadow-sm">
                     <span className="text-sm font-medium text-stone-700">
-                      Page {data.page}
+                      Page {data.page} / {data.totalPages}
                     </span>
                   </div>
                   <div className="h-6 w-px bg-stone-300" />
-                  <div className="rounded-xl border border-stone-200 bg-white/80 px-5 py-2.5 shadow-sm">
-                    <span className="text-sm font-medium text-stone-700">
-                      {data.totalPages} Total
-                    </span>
+                  <div className="rounded-xl border border-stone-200 bg-white/80 p-1 shadow-sm">
+                    <Button
+                      disabled={data.page === 1}
+                      onClick={handlePrev}
+                      variant="ghost"
+                      size="icon"
+                      className="cursor-pointer"
+                    >
+                      <ChevronLeft />
+                    </Button>
+                    <Button
+                      disabled={data.page === data.totalPages}
+                      onClick={handleNext}
+                      variant="ghost"
+                      size="icon"
+                      className="cursor-pointer"
+                    >
+                      <ChevronRight />
+                    </Button>
                   </div>
+                  <div className="flex gap-3"></div>
                 </div>
               </div>
 
