@@ -3,7 +3,7 @@ import { useSession } from "@/auth/authClient";
 import { useCharacterLimit } from "@/hooks/use-character-limit";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/Input";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/Textarea";
 import { Check, ImagePlus, Trash } from "lucide-react";

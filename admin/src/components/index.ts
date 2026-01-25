@@ -1,5 +1,5 @@
 export { Button } from "./ui/button";
-export { Input } from "./Input";
+export { Input } from "./ui/input";
 export { Textarea } from "./Textarea";
 export { Card, CardHeader, CardBody } from "./Card";
 export { LoadingSpinner, PageLoader } from "./LoadingSpinner";
