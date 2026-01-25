@@ -15,89 +15,171 @@ export const Header = () => {
   };
 
   return (
-    <nav className="flex flex-wrap items-center pt-2 px-4 pb-2 justify-between sticky top-0 z-50 backdrop-blur-md border-b md:rounded-t-xl">
-      <div className="flex items-center gap-5">
-        <SidebarTrigger />
-        <form className="flex items-center gap-2">
-          <Input
-            type="search"
-            name="searchGlobal"
-            id="searchGlobal"
-            placeholder="Search your posts"
-            className="min-w-0"
-          />
-        </form>
-      </div>
+    <>
+      <style>{`
+        .header-dropdown {
+          animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
 
-      <div className="relative">
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="flex cursor-pointer items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-        >
-          {session?.user.image ? (
-            <img
-              src={session.user.image}
-              alt={session.user.name}
-              className="w-8 h-8 rounded-full"
-            />
-          ) : (
-            <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
-              <span className="text-primary-700 font-semibold text-sm">
-                {session?.user.name.charAt(0).toUpperCase()}
-              </span>
-            </div>
-          )}
-          <div className="text-left hidden sm:block">
-            <p className="text-sm font-medium text-gray-900">
-              {session?.user.name}
-            </p>
-            <p className="text-xs text-gray-500">{session?.user.email}</p>
-          </div>
-          <svg
-            className="w-4 h-4 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
+      <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between border-b border-stone-200/60 bg-white/95 px-6 py-4 backdrop-blur-xl md:rounded-t-xl">
+        <div className="flex items-center gap-5">
+          <SidebarTrigger />
 
-        {isMenuOpen && (
-          <>
-            <div
-              className="fixed min-h-screen inset-0 z-10"
-              onClick={() => setIsMenuOpen(false)}
-            />
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
-              <button
-                onClick={handleLogout}
-                className="w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+          <form className="flex items-center gap-2">
+            <div className="relative">
+              <svg
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-                Logout
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <Input
+                type="search"
+                name="searchGlobal"
+                id="searchGlobal"
+                placeholder="Search your posts..."
+                className="min-w-0 border-stone-200 bg-white pl-10 pr-4 transition-all duration-300 placeholder:text-stone-400 focus:border-stone-400 sm:w-64"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              />
             </div>
-          </>
-        )}
-      </div>
-    </nav>
+          </form>
+        </div>
+
+        <div className="relative">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex cursor-pointer items-center gap-3 rounded-xl border border-stone-200/60 bg-white/80 px-3 py-2 transition-all duration-300 hover:border-stone-300 "
+          >
+            {/* Profile Image */}
+            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border-2 border-stone-200 transition-transform duration-300 hover:scale-105">
+              {session?.user.image ? (
+                <img
+                  src={session.user.image}
+                  alt={session.user.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-amber-500 to-rose-500">
+                  <span className="text-sm font-semibold text-white">
+                    {session?.user.name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* User Info */}
+            <div className="hidden text-left sm:block">
+              <p
+                className="text-sm font-medium text-stone-900"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              >
+                {session?.user.name}
+              </p>
+              <p
+                className="text-xs text-stone-500"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              >
+                {session?.user.email}
+              </p>
+            </div>
+
+            {/* Dropdown Arrow */}
+            <svg
+              className={`h-4 w-4 text-stone-400 transition-transform duration-300 ${isMenuOpen ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          {isMenuOpen && (
+            <>
+              {/* Backdrop */}
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setIsMenuOpen(false)}
+              />
+
+              {/* Dropdown Menu */}
+              <div className="header-dropdown absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-stone-200 bg-white shadow-2xl">
+                <div className="border-b border-stone-200/60 p-4">
+                  <p
+                    className="truncate text-sm font-medium text-stone-900"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    {session?.user.name}
+                  </p>
+                  <p
+                    className="truncate text-xs text-stone-500 pb-1"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    @{session?.user.username}
+                  </p>
+                  <p
+                    className="truncate text-xs text-stone-500"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    {session?.user.email}
+                  </p>
+                </div>
+
+                <div className="p-2">
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left transition-all duration-300 hover:bg-red-50 hover:text-red-600"
+                  >
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    <span
+                      className="text-sm font-medium"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
+                      Logout
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </nav>
+    </>
   );
 };
