@@ -40,7 +40,7 @@ export function BlogListPage() {
     }
   };
 
-  const handleChangeStatus = async (postId: string, publishStatus: boolean) => {
+  const togglePostPublishStatus = async (postId: string, publishStatus: boolean) => {
     try {
       await changePostPublishStatus.mutateAsync({ postId, publishStatus });
     } catch (err) {
@@ -257,7 +257,7 @@ export function BlogListPage() {
                         {/* Status Badge */}
                         <button
                           onClick={() =>
-                            handleChangeStatus(post.id, post.published)
+                            togglePostPublishStatus(post.id, post.published)
                           }
                           className="status-btn flex items-start justify-between cursor-pointer w-fit"
                         >
