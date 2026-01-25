@@ -112,7 +112,7 @@ export function BlogForm({
         )}
         {/* Top bar */}
         <header className="border-stone-200/40 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 md:px-8 py-4">
+          <div className="mx-auto flex max-w-5xl items-center justify-between px-4 md:px-8 py-4">
             <div className="flex items-center gap-4">
               {onCancel && (
                 <button
@@ -151,7 +151,7 @@ export function BlogForm({
         </header>
 
         {/* Writing canvas */}
-        <section className="h-full mx-auto max-w-6xl overflow-y-auto pt-5 pb-32">
+        <section className="h-full mx-auto max-w-5xl overflow-y-auto pt-5 pb-32">
           <div className="mx-auto px-6 md:px-8">
             {/* Error */}
             {generalError && (
