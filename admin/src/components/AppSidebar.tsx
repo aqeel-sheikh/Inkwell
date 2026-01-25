@@ -1,5 +1,7 @@
-import { Home, LibraryBig, Settings, BookOpen } from "lucide-react";
+import { Home, FileText, Settings, BookOpen, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router";
+import { signOut } from "@/auth/authClient";
+import { useNavigate } from "react-router";
 import {
   Sidebar,
   SidebarContent,
@@ -9,6 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 
 // Menu items.
@@ -21,7 +24,7 @@ const items = [
   {
     name: "Blog Posts",
     path: "/dashboard/blogs",
-    icon: LibraryBig,
+    icon: FileText,
   },
   {
     name: "Settings",
@@ -32,49 +35,111 @@ const items = [
 
 export function AppSidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/login");
+  };
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="gap-1 mb-2 p-1">
-            <a href="/dashboard" className="flex gap-2 text-xl items-center">
-              <BookOpen
-                className="bg-accent-coral rounded-sm p-1 text-primary-50"
-                size={30}
-              />{" "}
-              <span className="font-display text-s2xl font-bold text-primary-900">
-                Inkwell
-              </span>
-            </a>
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => {
-                const isActive = location.pathname === item.path;
-                return (
-                  <SidebarMenuItem key={item.name}>
-                    <SidebarMenuButton
-                      asChild
-                      className={`${isActive ? "hover:bg-accent-coral hover:text-white active:bg-accent-coral active:text-white" : "hover:text-accent-coral active:text-accent-coral"}`}
-                    >
-                      <Link
-                        to={item.path}
-                        className={`${
-                          isActive ? "bg-accent-coral text-white" : ""
-                        }`}
+    <>
+      <style>{`
+        /* Logo hover animation */
+        .logo-link:hover .logo-icon {
+          transform: scale(1.1) rotate(3deg);
+        }
+        
+        /* Menu item icon hover */
+        .menu-item:hover .menu-icon {
+          transform: scale(1.1);
+        }
+      `}</style>
+
+      <Sidebar
+        collapsible="icon"
+        className="border-r border-stone-200/60 bg-white/95 backdrop-blur-xl"
+      >
+        <SidebarContent>
+          <SidebarGroup>
+            {/* Logo */}
+            <SidebarGroupLabel className="mb-6 p-4">
+              <a
+                href="/dashboard"
+                className="logo-link flex items-center gap-3"
+              >
+                <div className="logo-icon flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-amber-500 to-rose-500 shadow-lg transition-all duration-300">
+                  <BookOpen className="h-6 w-6 text-white" strokeWidth={2} />
+                </div>
+                <span
+                  className="text-2xl font-light tracking-tight text-stone-900"
+                  style={{ fontFamily: "'Crimson Pro', serif" }}
+                >
+                  Inkwell
+                </span>
+              </a>
+            </SidebarGroupLabel>
+
+            {/* Navigation */}
+            <SidebarGroupContent className="px-3 -mx-3">
+              <SidebarMenu className="space-y-1">
+                {items.map((item) => {
+                  const isActive = location.pathname === item.path;
+                  return (
+                    <SidebarMenuItem key={item.name}>
+                      <SidebarMenuButton
+                        tooltip={item.name}
+                        asChild
+                        className={`
+                          menu-item relative overflow-hidden rounded-xl px-4 py-3 
+                          ${
+                            isActive
+                              ? "bg-linear-to-br from-stone-900 to-stone-800 hover:text-white text-white shadow-lg hover:shadow-xl"
+                              : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                          }
+                        `}
                       >
-                        <item.icon />
-                        <span>{item.name}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+                        <Link
+                          to={item.path}
+                          className="flex items-center gap-3"
+                        >
+                          {/* Icon */}
+                          <item.icon
+                            className={`menu-icon h-5 w-5 transition-transform duration-300 will-change-transform ${isActive ? "scale-110" : ""}`}
+                            strokeWidth={2}
+                          />
+
+                          {/* Label */}
+                          <span
+                            className="text-sm font-medium"
+                            style={{ fontFamily: "'DM Sans', sans-serif" }}
+                          >
+                            {item.name}
+                          </span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter className="pb-5 px-3 -mx-1">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                onClick={handleLogout}
+                tooltip={"Logout"}
+                className="flex px-4 rounded-xl text-stone-600 transition-all duration-300 hover:text-red-600 cursor-pointer"
+              >
+                <LogOut className="h-4 w-4" strokeWidth={2} />
+                <span className="">Logout</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+    </>
   );
 }

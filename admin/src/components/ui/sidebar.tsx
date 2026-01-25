@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -406,7 +404,7 @@ function SidebarGroupLabel({
       data-sidebar="group-label"
       className={cn(
         "text-sidebar-foreground/70 ring-sidebar-ring flex shrink-0 items-center rounded-md px-2 font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-8 [&>svg]:shrink-0",
-        "group-data-[collapsible=icon]:-mt-12 group-data-[collapsible=icon]:opacity-0",
+        "group-data-[collapsible=icon]:-mt-24 group-data-[collapsible=icon]:opacity-0",
         className,
       )}
       {...props}
