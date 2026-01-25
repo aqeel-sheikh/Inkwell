@@ -35,6 +35,9 @@ export const selectUserPosts = async ({
   return await prisma.blogPost.findMany({
     skip: (page - 1) * limit,
     take: limit,
+    orderBy: {
+      createdAt: "desc"
+    },
     where: {
       authorId: userId,
     },
@@ -96,6 +99,9 @@ export const selectPublishedPosts = async () => {
   return await prisma.blogPost.findMany({
     where: {
       published: true,
+    },
+    orderBy:{
+      createdAt: "desc"
     },
     include: {
       author: {
