@@ -26,52 +26,52 @@ export function useUsernameValidation(
   }, [username, debouncedUsername]);
 
   useEffect(() => {
+    const checkUsername = async (username: string) => {
+      setIsCheckingUsername(true);
+
+      if (username.length < 1) {
+        setUsernameError("");
+        setIsCheckingUsername(false);
+        return;
+      }
+
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        setUsernameError("Username can contain only letters, numbers and _");
+        setIsCheckingUsername(false);
+        return;
+      }
+
+      setUsernameError("");
+
+      try {
+        const res = await fetch(`${apiUrl}?username=${username}`, {
+          credentials: "include",
+        });
+        const { exists, message } = await res.json();
+
+        if (res.status === 409 && exists) {
+          setUsernameError(message);
+        } else if (res.status === 200 && !exists) {
+          setUsernameError("");
+        } else if (res.status === 400) {
+          setUsernameError(message);
+        } else {
+          throw new Error(message);
+        }
+      } catch (err) {
+        setUsernameError("Error checking username");
+        console.log(err);
+      } finally {
+        setIsCheckingUsername(false);
+      }
+    };
     if (debouncedUsername) {
       checkUsername(debouncedUsername);
     } else {
       setIsCheckingUsername(false);
       setUsernameError("");
     }
-  }, [debouncedUsername]);
-
-  const checkUsername = async (username: string) => {
-    setIsCheckingUsername(true);
-
-    if (username.length < 1) {
-      setUsernameError("");
-      setIsCheckingUsername(false);
-      return;
-    }
-
-    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-      setUsernameError("Username can contain only letters, numbers and _");
-      setIsCheckingUsername(false);
-      return;
-    }
-
-    setUsernameError("");
-
-    try {
-      const res = await fetch(`${apiUrl}?username=${username}`, {
-        credentials: "include"
-      });
-      const { exists, message } = await res.json();
-
-      if (res.status === 409 && exists) {
-        setUsernameError(message);
-      } else if (res.status === 200 && !exists) {
-        setUsernameError("");
-      } else if (res.status === 400) {
-        setUsernameError(message);
-      } else {
-        throw new Error(message);
-      }
-    } catch (e) {
-      setUsernameError("Error checking username");
-    } finally {
-      setIsCheckingUsername(false);
-    }
-  };
+  }, [debouncedUsername, apiUrl]);
 
   return {
     usernameError,
