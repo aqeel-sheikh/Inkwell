@@ -32,16 +32,23 @@ export const selectUserPosts = async ({
   page,
   limit,
 }: SelectUserPosts) => {
-  return await prisma.blogPost.findMany({
+  const paginatedPosts = await prisma.blogPost.findMany({
     skip: (page - 1) * limit,
     take: limit,
     orderBy: {
-      createdAt: "desc"
+      createdAt: "desc",
     },
     where: {
       authorId: userId,
     },
   });
+  const totalPosts = await prisma.blogPost.count({
+    where: {
+      authorId: userId,
+    },
+  });
+
+  return { paginatedPosts, totalPosts };
 };
 
 export const selectUserPostDetails = async (postId: string, userId: string) => {
@@ -100,8 +107,8 @@ export const selectPublishedPosts = async () => {
     where: {
       published: true,
     },
-    orderBy:{
-      createdAt: "desc"
+    orderBy: {
+      createdAt: "desc",
     },
     include: {
       author: {

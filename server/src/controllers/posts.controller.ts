@@ -44,14 +44,17 @@ export const getUserPosts = async (
   const limit = parseInt(req.query.limit as string) || 20;
 
   try {
-    const posts = await selectUserPosts({ userId, page, limit });
-    const total = posts.length;
-    return res.status(200).json({
-      data: posts,
+    const { paginatedPosts, totalPosts } = await selectUserPosts({
+      userId,
       page,
       limit,
-      total,
-      totalPages: Math.ceil(total / limit),
+    });
+    return res.status(200).json({
+      data: paginatedPosts,
+      page,
+      limit,
+      total: totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
     });
   } catch (err) {
     console.error("Post fetch failed: ", err);
