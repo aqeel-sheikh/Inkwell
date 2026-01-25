@@ -2,10 +2,10 @@
 
 import { ChangeEvent, useState } from "react";
 
-type UseCharacterLimitProps = {
+interface UseCharacterLimitProps {
   maxLength: number;
   initialValue?: string;
-};
+}
 
 export function useCharacterLimit({
   maxLength,
