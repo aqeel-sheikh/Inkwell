@@ -102,6 +102,22 @@ export const selectDashboardStats = async (userId: string) => {
   };
 };
 
+export const changeUserPostStatus = async (
+  userId: string,
+  postId: string,
+  publishStatus: boolean,
+) => {
+  await prisma.blogPost.update({
+    where: {
+      id: postId,
+      authorId: userId,
+    },
+    data: {
+      published: !publishStatus,
+    },
+  });
+};
+
 export const selectPublishedPosts = async () => {
   return await prisma.blogPost.findMany({
     where: {

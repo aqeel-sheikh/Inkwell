@@ -6,6 +6,7 @@ import {
   selectUserPostDetails,
   updateUserPost,
   deleteUserPost,
+  changeUserPostStatus,
   selectPublishedPosts,
   selectPublishedPostBySlug,
 } from "@/db/queries";
@@ -124,6 +125,27 @@ export const removeUserPost = async (
     return res
       .status(500)
       .json({ message: "Something went wrong! Failed to delete the post" });
+  }
+};
+
+export const editUserPostStatus = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
+  const userId = (req as any).userId;
+  const { postId, publishStatus } = req.body as {
+    postId: string;
+    publishStatus: boolean;
+  };
+
+  try {
+    await changeUserPostStatus(userId, postId, publishStatus);
+    return res.status(201).json({ message: "Post updated" });
+  } catch (err) {
+    console.error("Couldn't Change user post publish status", err);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong! Failed to change post status" });
   }
 };
 
