@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import {
   useBlogPosts,
@@ -12,14 +12,31 @@ import {
   LoadingSpinner,
   EmptyState,
   Modal,
+  BlogFilterButtons,
 } from "@/components";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { BlogPost } from "@/types";
 
 export function BlogListPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading } = useBlogPosts(currentPage, 10);
+  const { data, isLoading } = useBlogPosts(currentPage, 9);
   const deleteBlog = useDeleteBlog();
   const changePostPublishStatus = useChangePublishStatus();
+  const [filterPosts, setFilterPosts] = useState("All");
+
+  const publishedPosts = useMemo(
+    () => data?.data?.filter((post) => post.published) ?? [],
+    [data],
+  );
+  const draftPosts = useMemo(
+    () => data?.data?.filter((post) => !post.published) ?? [],
+    [data],
+  );
 
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
@@ -40,7 +57,10 @@ export function BlogListPage() {
     }
   };
 
-  const togglePostPublishStatus = async (postId: string, publishStatus: boolean) => {
+  const togglePostPublishStatus = async (
+    postId: string,
+    publishStatus: boolean,
+  ) => {
     try {
       await changePostPublishStatus.mutateAsync({ postId, publishStatus });
     } catch (err) {
@@ -205,6 +225,13 @@ export function BlogListPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
+                  <div className="flex gap-3 rounded-xl border border-stone-200 bg-white/80 px-1 py-1 shadow-sm">
+                    <BlogFilterButtons
+                      setFilterPosts={setFilterPosts}
+                      filterPosts={filterPosts}
+                    />{" "}
+                  </div>
+                  <div className="h-6 w-px bg-stone-300" />
                   <div className="rounded-xl border border-stone-200 bg-white/80 px-5 py-2.5 shadow-sm">
                     <span className="text-sm font-medium text-stone-700">
                       Page {data.page} / {data.totalPages}
@@ -212,24 +239,29 @@ export function BlogListPage() {
                   </div>
                   <div className="h-6 w-px bg-stone-300" />
                   <div className="rounded-xl border border-stone-200 bg-white/80 p-1 shadow-sm">
-                    <Button
-                      disabled={data.page === 1}
-                      onClick={handlePrev}
-                      variant="ghost"
-                      size="icon"
-                      className="cursor-pointer"
-                    >
-                      <ChevronLeft />
-                    </Button>
-                    <Button
-                      disabled={data.page === data.totalPages}
-                      onClick={handleNext}
-                      variant="ghost"
-                      size="icon"
-                      className="cursor-pointer"
-                    >
-                      <ChevronRight />
-                    </Button>
+                    <PaginationButton tooltip="Prev page">
+                      <Button
+                        disabled={data.page === 1}
+                        onClick={handlePrev}
+                        variant="ghost"
+                        size="icon"
+                        className="cursor-pointer"
+                      >
+                        <ChevronLeft />
+                      </Button>
+                    </PaginationButton>
+
+                    <PaginationButton tooltip="Next page">
+                      <Button
+                        disabled={data.page === data.totalPages}
+                        onClick={handleNext}
+                        variant="ghost"
+                        size="icon"
+                        className="cursor-pointer"
+                      >
+                        <ChevronRight />
+                      </Button>
+                    </PaginationButton>
                   </div>
                   <div className="flex gap-3"></div>
                 </div>
@@ -237,163 +269,97 @@ export function BlogListPage() {
 
               {/* Blog Posts Grid */}
               <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-                {data.data.map((post, index) => (
-                  <article
-                    key={post.id}
-                    className="group animate-fadeInUp"
-                    style={{
-                      animationDelay: `${0.2 + index * 0.1}s`,
-                      animationFillMode: "both",
-                    }}
-                  >
-                    <Card className="glass-effect relative h-full overflow-hidden border border-stone-200/80 shadow-lg transition-all duration-700 hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-900/10 hover:-translate-y-2">
-                      {/* Decorative gradient overlay */}
-                      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-amber-50/0 via-transparent to-stone-50/0 opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-
-                      {/* Top accent line */}
-                      <div className="absolute left-0 right-0 top-0 h-1 bg-linear-to-r from-amber-500 via-rose-500 to-purple-500 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-                      <CardBody className="relative flex h-full flex-col gap-6 p-8">
-                        {/* Status Badge */}
-                        <button
-                          onClick={() =>
-                            togglePostPublishStatus(post.id, post.published)
-                          }
-                          className="status-btn flex items-start justify-between cursor-pointer w-fit"
-                        >
-                          <span
-                            className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] shadow-sm transition-all duration-300 ${
-                              post.published
-                                ? "border border-emerald-200/80 bg-emerald-50/80 text-emerald-700 published"
-                                : "border border-amber-200/80 bg-amber-50/80 text-amber-700 draft"
-                            }`}
-                          >
-                            <span
-                              className={`h-1.5 w-1.5 rounded-full ${post.published ? "bg-emerald-500" : "bg-amber-500"}`}
-                            />
-                            {post.published ? "Published" : "Draft"}
-                          </span>
-                        </button>
-
-                        {/* Title */}
-                        <h2
-                          className="text-shadow-sm line-clamp-2 text-3xl font-light leading-tight tracking-tight text-stone-900 transition-colors duration-300 group-hover:text-stone-700"
-                          style={{ fontFamily: "'Crimson Pro', serif" }}
-                        >
-                          {post.title}
-                        </h2>
-
-                        {/* Excerpt */}
-                        <p className="line-clamp-3 wrap-break-word grow text-base leading-relaxed text-stone-600">
-                          {post.excerpt}
-                        </p>
-
-                        {/* Metadata */}
-                        <div className="space-y-4 border-t border-stone-200/60 pt-6">
-                          {/* Date */}
-                          <div className="flex items-center gap-2.5 text-sm text-stone-500">
-                            <svg
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={1.5}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
-                              />
-                            </svg>
-                            <time className="font-medium">
-                              {new Date(post.createdAt).toLocaleDateString(
-                                "en-US",
-                                {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                  hour: "numeric",
-                                  minute: "2-digit",
-                                },
-                              )}
-                            </time>
-                          </div>
-
-                          {/* Tags */}
-                          {post.tags && post.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-2">
-                              {post.tags.slice(0, 3).map((tag, index) => (
-                                <span
-                                  key={index}
-                                  className="inline-flex items-center rounded-lg border border-stone-200 bg-white/80 px-3 py-1 text-xs font-medium text-stone-700 shadow-sm transition-colors duration-200 hover:border-stone-300 hover:bg-stone-50"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                              {post.tags.length > 3 && (
-                                <span className="inline-flex items-center px-2 text-xs font-medium text-stone-400">
-                                  +{post.tags.length - 3}
-                                </span>
-                              )}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex items-center gap-3 border-t border-stone-200/60 pt-6">
-                          <Link
-                            to={`/dashboard/blogs/${post.id}/edit`}
-                            className="flex-1"
-                          >
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full cursor-pointer justify-center border border-stone-200 bg-white/80 px-4 py-2.5 text-sm font-medium text-stone-700 shadow-sm transition-all duration-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white hover:shadow-md active:scale-95"
-                            >
-                              <svg
-                                className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                                />
-                              </svg>
-                              Edit
-                            </Button>
-                          </Link>
-
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() =>
-                              handleDeleteClick(post.id, post.title)
-                            }
-                            className="group/delete cursor-pointer border border-stone-200 bg-white/80 p-2.5 shadow-sm transition-all duration-300 hover:border-red-300 hover:bg-red-50 hover:shadow-md active:scale-95"
-                          >
-                            <svg
-                              className="h-5 w-5 text-stone-500 transition-all duration-300 group-hover/delete:scale-110 group-hover/delete:text-red-600"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                              />
-                            </svg>
-                          </Button>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  </article>
-                ))}
+                {filterPosts === "Published" ? (
+                  !publishedPosts || publishedPosts.length === 0 ? (
+                    <div
+                      className="animate-fadeInUp col-span-1 md:col-span-2 xl:col-span-3"
+                      style={{
+                        animationDelay: "0.2s",
+                        animationFillMode: "both",
+                      }}
+                    >
+                      <Card className="glass-effect border-2 border-stone-200/60 shadow-xl">
+                        <CardBody className="py-24">
+                          <EmptyState
+                            title="No published posts"
+                            message="Publish a blog post to see it listed here"
+                            action={{
+                              label: "Create Post",
+                              onClick: () =>
+                                (window.location.href = "/dashboard/blogs/new"),
+                            }}
+                          />
+                        </CardBody>
+                      </Card>
+                    </div>
+                  ) : (
+                    publishedPosts.map((post, index) => (
+                      <BlogArticleCard
+                        key={post.id}
+                        post={post}
+                        index={index}
+                        handleDeleteClick={() =>
+                          handleDeleteClick(post.id, post.title)
+                        }
+                        togglePostPublishStatus={() =>
+                          togglePostPublishStatus(post.id, post.published)
+                        }
+                      />
+                    ))
+                  )
+                ) : filterPosts === "Drafts" ? (
+                  !draftPosts || draftPosts.length === 0 ? (
+                    <div
+                      className="animate-fadeInUp col-span-1 md:col-span-2 xl:col-span-3"
+                      style={{
+                        animationDelay: "0.2s",
+                        animationFillMode: "both",
+                      }}
+                    >
+                      <Card className="glass-effect border-2 border-stone-200/60 shadow-xl">
+                        <CardBody className="py-24">
+                          <EmptyState
+                            title="No drafts"
+                            message="Start a new blog post to save it as a draft"
+                            action={{
+                              label: "Create Post",
+                              onClick: () =>
+                                (window.location.href = "/dashboard/blogs/new"),
+                            }}
+                          />
+                        </CardBody>
+                      </Card>
+                    </div>
+                  ) : (
+                    draftPosts.map((post, index) => (
+                      <BlogArticleCard
+                        key={post.id}
+                        post={post}
+                        index={index}
+                        handleDeleteClick={() =>
+                          handleDeleteClick(post.id, post.title)
+                        }
+                        togglePostPublishStatus={() =>
+                          togglePostPublishStatus(post.id, post.published)
+                        }
+                      />
+                    ))
+                  )
+                ) : (
+                  data.data.map((post, index) => (
+                    <BlogArticleCard
+                      key={post.id}
+                      post={post}
+                      index={index}
+                      handleDeleteClick={() =>
+                        handleDeleteClick(post.id, post.title)
+                      }
+                      togglePostPublishStatus={() =>
+                        togglePostPublishStatus(post.id, post.published)
+                      }
+                    />
+                  ))
+                )}
               </div>
             </div>
           )}
@@ -466,3 +432,181 @@ export function BlogListPage() {
     </>
   );
 }
+
+// Helper
+const PaginationButton = ({
+  children,
+  tooltip,
+}: {
+  children: React.ReactNode;
+  tooltip: string;
+}) => {
+  return (
+    <Tooltip delayDuration={500}>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipContent>
+        <p>{tooltip}</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+};
+
+const BlogArticleCard = ({
+  post,
+  index,
+  handleDeleteClick,
+  togglePostPublishStatus,
+}: {
+  post: BlogPost;
+  index: number;
+  handleDeleteClick: (id: string, title: string) => void;
+  togglePostPublishStatus: (id: string, status: boolean) => void;
+}) => {
+  return (
+    <article
+      key={post.id}
+      className="group animate-fadeInUp"
+      style={{
+        animationDelay: `${0.2 + index * 0.1}s`,
+        animationFillMode: "both",
+      }}
+    >
+      <Card className="glass-effect relative h-full overflow-hidden border border-stone-200/80 shadow-lg transition-all duration-700 hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-900/10 hover:-translate-y-2">
+        {/* Decorative gradient overlay */}
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-amber-50/0 via-transparent to-stone-50/0 opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+
+        {/* Top accent line */}
+        <div className="absolute left-0 right-0 top-0 h-1 bg-linear-to-r from-amber-500 via-rose-500 to-purple-500 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+        <CardBody className="relative flex h-full flex-col gap-6 p-8">
+          {/* Status Badge */}
+          <button
+            onClick={() => togglePostPublishStatus(post.id, post.published)}
+            className="status-btn flex items-start justify-between cursor-pointer w-fit"
+          >
+            <span
+              className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] shadow-sm transition-all duration-300 ${
+                post.published
+                  ? "border border-emerald-200/80 bg-emerald-50/80 text-emerald-700 published"
+                  : "border border-amber-200/80 bg-amber-50/80 text-amber-700 draft"
+              }`}
+            >
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${post.published ? "bg-emerald-500" : "bg-amber-500"}`}
+              />
+              {post.published ? "Published" : "Draft"}
+            </span>
+          </button>
+
+          {/* Title */}
+          <h2
+            className="text-shadow-sm line-clamp-2 text-3xl font-light leading-tight tracking-tight text-stone-900 transition-colors duration-300 group-hover:text-stone-700"
+            style={{ fontFamily: "'Crimson Pro', serif" }}
+          >
+            {post.title}
+          </h2>
+
+          {/* Excerpt */}
+          <p className="line-clamp-3 wrap-break-word grow text-base leading-relaxed text-stone-600">
+            {post.excerpt}
+          </p>
+
+          {/* Metadata */}
+          <div className="space-y-4 border-t border-stone-200/60 pt-6">
+            {/* Date */}
+            <div className="flex items-center gap-2.5 text-sm text-stone-500">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+                />
+              </svg>
+              <time className="font-medium">
+                {new Date(post.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                })}
+              </time>
+            </div>
+
+            {/* Tags */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {post.tags.slice(0, 3).map((tag, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center rounded-lg border border-stone-200 bg-white/80 px-3 py-1 text-xs font-medium text-stone-700 shadow-sm transition-colors duration-200 hover:border-stone-300 hover:bg-stone-50"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {post.tags.length > 3 && (
+                  <span className="inline-flex items-center px-2 text-xs font-medium text-stone-400">
+                    +{post.tags.length - 3}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 border-t border-stone-200/60 pt-6">
+            <Link to={`/dashboard/blogs/${post.id}/edit`} className="flex-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full cursor-pointer justify-center border border-stone-200 bg-white/80 px-4 py-2.5 text-sm font-medium text-stone-700 shadow-sm transition-all duration-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white hover:shadow-md active:scale-95"
+              >
+                <svg
+                  className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                  />
+                </svg>
+                Edit
+              </Button>
+            </Link>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDeleteClick(post.id, post.title)}
+              className="group/delete cursor-pointer border border-stone-200 bg-white/80 p-2.5 shadow-sm transition-all duration-300 hover:border-red-300 hover:bg-red-50 hover:shadow-md active:scale-95"
+            >
+              <svg
+                className="h-5 w-5 text-stone-500 transition-all duration-300 group-hover/delete:scale-110 group-hover/delete:text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                />
+              </svg>
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
+    </article>
+  );
+};
