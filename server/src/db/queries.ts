@@ -150,7 +150,13 @@ export const selectPublishedPostBySlug = async (slug: string) => {
     },
     include: {
       author: {
-        select: { name: true },
+        select: {
+          name: true,
+          username: true,
+          bio: true,
+          website: true,
+          image: true,
+        },
       },
     },
   });
@@ -163,7 +169,7 @@ export const selectPublishedPostComments = async (postId: string) => {
     },
     include: {
       author: {
-        select: { name: true },
+        select: { name: true, username: true },
       },
     },
   });
