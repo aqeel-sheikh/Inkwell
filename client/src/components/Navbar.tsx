@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Button } from "./Button";
+import { Button } from "@/components";
 import { signOut, useSession } from "@/auth/auth-client";
 import AuthModel from "./AuthModel";
 
@@ -48,7 +48,7 @@ export function Navbar() {
             </a>
 
             {isAthunticated ? (
-              <Button variant="primary" onClick={() => signOut()}>
+              <Button variant="default" onClick={() => signOut()}>
                 Log out
               </Button>
             ) : (

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Model } from "./Model";
-import { Button } from "./Button";
+import { Button } from "@/components";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 
@@ -28,7 +28,7 @@ const AuthModel = () => {
         />
       </Model>
       <Button
-        variant="primary"
+        variant="default"
         className="cursor-pointer"
         onClick={() => handleDeleteClick()}
       >

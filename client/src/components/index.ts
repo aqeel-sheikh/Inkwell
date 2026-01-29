@@ -1,4 +1,4 @@
-export { Button } from './Button'
+export { Button } from './ui/button'
 export { Card, CardHeader, CardContent, CardFooter } from './Card'
 export { Input } from './Input'
 export { Textarea } from './Textarea'
