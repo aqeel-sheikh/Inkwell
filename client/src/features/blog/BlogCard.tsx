@@ -30,20 +30,22 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
             </div>
           )}
 
-          <div className="space-y-3 border border-black/5 h-[300px] p-4 bg-white/80 rounded-2xl flex flex-col transition-colors hover:bg-accent-coral group">
+          <div className="space-y-3 border border-primary-100 h-[300px] p-4 bg-white/80 rounded-2xl flex flex-col transition-colors hover:bg-primary-700 group">
             {post.tags && post.tags.length > 0 ? (
               <div className="flex gap-2 overflow-x-hidden whitespace-nowrap">
                 {post.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs font-medium px-3 py-1 bg-accent-mint/10 text-accent-mint rounded-full  transition-colors group-hover:text-black/50 group-hover:bg-white/20"
+                    className="text-xs font-medium px-3 py-1 bg-primary-100 text-primary-500 rounded-full  transition-colors group-hover:text-primary-300 group-hover:bg-primary-600"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
             ) : (
-              <div className="py-1 text-xs text-black/30">No tags</div>
+              <div className="py-1 text-xs text-black/30 group-hover:text-primary-500">
+                No tags
+              </div>
             )}
 
             <h2 className="font-display text-2xl md:text-3xl font-bold text-primary-900 group-hover:text-white transition-colors line-clamp-2">
@@ -63,8 +65,8 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
                     className="w-10 h-10 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-accent-lavender/20 flex items-center justify-center transition-colors group-hover:bg-white/50">
-                    <span className="text-accent-lavender font-semibold text-sm transition-colors group-hover:text-accent-coral">
+                  <div className="w-10 h-10 rounded-full bg-primary-200 flex items-center justify-center transition-colors group-hover:bg-primary-600">
+                    <span className="text-primary-400 font-semibold text-sm transition-colors">
                       {post.author.name.charAt(0).toUpperCase()}
                     </span>
                   </div>
