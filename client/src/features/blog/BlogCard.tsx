@@ -58,9 +58,9 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
 
             <div className="flex items-center gap-4 pt-4 mt-auto">
               <div className="flex items-center gap-3">
-                {post.author?.avatar ? (
+                {post.author.image ? (
                   <img
-                    src={post.author.avatar}
+                    src={post.author.image}
                     alt={post.author.name}
                     className="w-10 h-10 rounded-full object-cover"
                   />
