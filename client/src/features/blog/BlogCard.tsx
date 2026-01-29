@@ -1,5 +1,7 @@
 import { Link } from "react-router";
 import type { BlogPost } from "@/types";
+import { calculateReadingTime } from "@/lib/utils";
+import { Clock } from "lucide-react";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -79,6 +81,10 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
                     {formattedDate}
                   </p>
                 </div>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-primary-400">
+                <Clock className="h-4 w-4" />
+                <span>{calculateReadingTime(post.content)} min</span>
               </div>
             </div>
           </div>

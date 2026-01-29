@@ -4,6 +4,7 @@ import { BlogList } from "@/features/blog/BlogList";
 import { useBlogPosts } from "@/features/blog/useBlog";
 import { Bookmark } from "lucide-react";
 import { HomepagePagination } from "@/components/HomepagePagination";
+import { calculateReadingTime } from "@/lib/utils";
 
 export function HomePage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,7 +58,12 @@ export function HomePage() {
                   })}
                 </time>
                 <span>•</span>
-                <span>5 min read</span>
+                <span>
+                  {(featuredPost?.content &&
+                    calculateReadingTime(featuredPost.content)) ||
+                    "5"}{" "}
+                  min read
+                </span>
               </div>
 
               <h2
