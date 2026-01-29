@@ -21,14 +21,6 @@ export function Footer() {
                   href="#"
                   className="hover:text-accent-coral transition-colors"
                 >
-                  Latest Stories
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-accent-coral transition-colors"
-                >
                   Popular
                 </a>
               </li>
@@ -40,12 +32,66 @@ export function Footer() {
                   Categories
                 </a>
               </li>
+              <li>
+                <a
+                  href="#"
+                  className="hover:text-accent-coral transition-colors"
+                >
+                  Latest Stories
+                </a>
+              </li>
+            </ul>
+          </div>
+          {/* Partner Up*/}
+          <div>
+            <h4 className="font-semibold mb-4">Partner Up</h4>
+            <ul className="space-y-2 text-sm text-primary-300">
+              <li>
+                <a
+                  href="https://www.fiverr.com/s/2Kjv3rL"
+                  className="hover:text-accent-coral transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Fiverr
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.upwork.com/freelancers/~01292ba73f79d5cc5e?mp_source=share"
+                  className="hover:text-accent-coral transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Upwork
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:hello@aqeelsheikh.com"
+                  className="hover:text-accent-coral transition-colors wrap-break-word"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  hello@aqeelsheikh.com
+                </a>
+              </li>
             </ul>
           </div>
           {/* Connect */}
           <div>
             <h4 className="font-semibold mb-4">Connect</h4>
             <ul className="space-y-2 text-sm text-primary-300">
+              <li>
+                <a
+                  href="https://github.com/aqeel-sheikh"
+                  className="hover:text-accent-coral transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Github
+                </a>
+              </li>
               <li>
                 <a
                   href="https://x.com/aqeell_sheikh"
@@ -66,52 +112,6 @@ export function Footer() {
                   LinkedIn
                 </a>
               </li>
-              <li>
-                <a
-                  href="https://github.com/aqeel-sheikh"
-                  className="hover:text-accent-coral transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Github
-                </a>
-              </li>
-            </ul>
-          </div>
-          {/* Partner Up*/}
-          <div>
-            <h4 className="font-semibold mb-4">Partner Up</h4>
-            <ul className="space-y-2 text-sm text-primary-300">
-              <li>
-                <a
-                  href="https://x.com/aqeell_sheikh"
-                  className="hover:text-accent-coral transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Fiverr
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.linkedin.com/in/aqeelsheikh/"
-                  className="hover:text-accent-coral transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Upwork
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:hello@aqeelsheikh.com"
-                  className="hover:text-accent-coral transition-colors wrap-break-word"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  hello@aqeelsheikh.com
-                </a>
-              </li>
             </ul>
           </div>
           {/* Support */}
@@ -129,15 +129,6 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://github.com/aqeel-sheikh/Inkwell/pulls"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Open a pull request
-                </a>
-              </li>
-              <li>
-                <a
                   href="https://github.com/aqeel-sheikh/Inkwell/issues"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -145,13 +136,28 @@ export function Footer() {
                   Report an issue
                 </a>
               </li>
+              <li>
+                <a
+                  href="https://github.com/aqeel-sheikh/Inkwell/pulls"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Open a pull request
+                </a>
+              </li>
             </ul>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-primary-800 text-center text-sm text-primary-400">
           © {currentYear} Inkwell -{" "}
-          <a href="https://aqeelsheikh.com">Aqeel Sheikh</a>. Crafted with care
-          for readers everywhere.
+          <a
+            href="https://aqeelsheikh.com"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Aqeel Sheikh
+          </a>
+          . Crafted with care for readers everywhere.
         </div>
       </div>
     </footer>
