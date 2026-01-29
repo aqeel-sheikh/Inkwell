@@ -5,13 +5,15 @@ import { CommentForm } from "@/features/comments/CommentForm";
 import { PageLoader } from "@/components/LoadingSpinner";
 import { ErrorMessage } from "@/components";
 import { useSession } from "@/auth/auth-client";
+import { ChevronLeft, Clock, Calendar } from "lucide-react";
+import { calculateReadingTime } from "@/lib/utils";
 
 export function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error, refetch } = useBlogPost(slug!);
   const { data } = useSession();
 
-  const isAthunticated = data?.session ? true : false;
+  const isAuthenticated = data?.session ? true : false;
 
   if (isLoading) {
     return <PageLoader />;
@@ -19,7 +21,7 @@ export function BlogDetailPage() {
 
   if (error || !post) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <ErrorMessage
           message="Failed to load this story. It may have been removed or the URL is incorrect."
           onRetry={() => refetch()}
@@ -33,39 +35,30 @@ export function BlogDetailPage() {
     month: "long",
     day: "numeric",
   });
+  const randomNumber = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
 
   return (
-    <div className="min-h-screen">
-      <article className="py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fafaf9]">
+      <article className="bg-white py-12 md:py-16">
+        <div className="mx-auto max-w-4xl px-6 sm:px-8 lg:px-12">
           {/* Back Navigation */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-accent-coral transition-colors mb-8 group"
+            className="group mb-8 inline-flex items-center gap-2 text-stone-600 transition-colors hover:text-stone-900"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
           >
-            <svg
-              className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+            <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
             Back to stories
           </Link>
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="flex gap-2 mb-6 animate-fade-in">
+            <div className="animate-fadeIn mb-6 flex flex-wrap gap-2">
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-sm font-medium px-4 py-1.5 bg-accent-mint/10 text-accent-mint rounded-full"
+                  className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-medium text-stone-700 transition-colors hover:border-stone-300 hover:bg-white"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
                   {tag}
                 </span>
@@ -74,75 +67,137 @@ export function BlogDetailPage() {
           )}
 
           {/* Title */}
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-primary-900 mb-6 leading-tight animate-fade-in animation-delay-200">
+          <h1
+            className="animate-fadeIn delay-100 mb-6 text-4xl font-light leading-tight tracking-tight text-stone-900 md:text-5xl lg:text-6xl"
+            style={{ fontFamily: "'Crimson Pro', serif" }}
+          >
             {post.title}
           </h1>
 
-          {/* Author & Date */}
-          <div className="flex items-center gap-4 pb-8 mb-8 border-b border-primary-200 animate-fade-in animation-delay-400">
+          {/* Author & Meta */}
+          <div className="animate-fadeIn delay-200 mb-12 flex flex-wrap items-center gap-6 border-b border-stone-200/60 pb-8">
             <div className="flex items-center gap-3">
-              {post.author?.avatar ? (
+              {post.author?.image ? (
                 <img
-                  src={post.author.avatar}
+                  src={post.author.image}
                   alt={post.author.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="h-12 w-12 rounded-full object-cover"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-accent-lavender/20 flex items-center justify-center">
-                  <span className="text-accent-lavender font-semibold text-lg">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-300">
+                  <span className="text-lg font-semibold text-white">
                     {post.author.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
               )}
               <div>
-                <p className="font-semibold text-primary-900">
+                <p
+                  className="text-base font-medium text-stone-900"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
                   {post.author.name}
                 </p>
-                <p className="text-sm text-primary-500">{formattedDate}</p>
+                <p
+                  className="text-sm text-stone-500"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  @{post.author.username}
+                </p>
+              </div>
+            </div>
+
+            <div
+              className="flex items-center gap-4 text-sm text-stone-500"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
+              <div className="flex items-center gap-1.5">
+                <Calendar className="h-4 w-4" />
+                <time>{formattedDate}</time>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                <span>{calculateReadingTime(post.content)} min read</span>
               </div>
             </div>
           </div>
 
           {/* Cover Image */}
-          {post.coverImage && (
-            <div className="aspect-21/9 mb-12 overflow-hidden rounded-xl animate-scale-in">
-              <img
-                src={post.coverImage}
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
-
+          <div className="mb-12 overflow-hidden rounded-2xl">
+            <img
+              src={
+                post.coverImage ||
+                `https://picsum.photos/seed/${randomNumber}/800/450`
+              }
+              alt={post.title}
+              className="h-full w-full object-cover"
+            />
+          </div>
           {/* Content */}
-          <div className="prose prose-lg max-w-none animate-fade-in animation-delay-600">
-            {post.content}
+          <div
+            className="prose prose-lg prose-stone mx-auto max-w-none"
+            style={{ fontFamily: "'Lora', 'Georgia', serif" }}
+          >
+            <div className="whitespace-pre-wrap wrap-break-word break-all leading-relaxed text-stone-800">
+              {post.content}
+            </div>
           </div>
 
           {/* Author Bio */}
-          {post?.author?.bio && (
-            <div className="mt-16 p-8 bg-primary-100 rounded-xl border border-primary-200">
-              <div className="flex items-start gap-4">
-                {post.author.avatar ? (
+          {post.author.bio && (
+            <div className="mt-16 overflow-hidden rounded-2xl border border-stone-200/80 bg-stone-50/50 p-8">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+                {post.author.image ? (
                   <img
-                    src={post.author.avatar}
+                    src={post.author.image}
                     alt={post.author.name}
-                    className="w-16 h-16 rounded-full object-cover shrink-0"
+                    className="h-20 w-20 shrink-0 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-accent-lavender/20 flex items-center justify-center shrink-0">
-                    <span className="text-accent-lavender font-semibold text-xl">
-                      {post?.author?.name.charAt(0).toUpperCase()}
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-primary-300">
+                    <span className="text-2xl font-semibold text-white">
+                      {post.author.name.charAt(0).toUpperCase()}
                     </span>
                   </div>
                 )}
-                <div>
-                  <p className="font-display text-xl font-semibold text-primary-900 mb-2">
-                    About {post?.author?.name}
+                <div className="flex-1">
+                  <p
+                    className="mb-3 text-xl font-light text-stone-900"
+                    style={{ fontFamily: "'Crimson Pro', serif" }}
+                  >
+                    About{" "}
+                    <span className="font-semibold bg-red-100">{post.author.name}</span>
                   </p>
-                  <p className="text-primary-700 leading-relaxed">
-                    {post?.author?.bio}
+                  <p
+                    className="mb-3 leading-relaxed text-stone-700"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    {post.author.bio}
                   </p>
+                  {post.author.website && (
+                    <a
+                      href={post.author.website}
+                      className="inline-flex items-center gap-2 text-sm font-medium text-stone-900 transition-colors hover:text-stone-700"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                        />
+                      </svg>
+                      Visit website
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -151,10 +206,16 @@ export function BlogDetailPage() {
       </article>
 
       {/* Comments Section */}
-      <section className="py-16 bg-primary-50 border-t border-primary-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="border-t border-stone-200/60 bg-white py-16">
+        <div className="mx-auto max-w-4xl px-6 sm:px-8 lg:px-12">
+          <h2
+            className="mb-8 text-3xl font-light tracking-tight text-stone-900"
+            style={{ fontFamily: "'Crimson Pro', serif" }}
+          >
+            Comments
+          </h2>
           <div className="space-y-8">
-            <CommentForm postId={post.id} isAuthenticated={isAthunticated} />
+            <CommentForm postId={post.id} isAuthenticated={isAuthenticated} />
             <CommentList postId={post.id} />
           </div>
         </div>
