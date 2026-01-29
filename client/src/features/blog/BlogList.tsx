@@ -1,12 +1,20 @@
-import { useBlogPosts } from './useBlog'
-import { BlogCard } from './BlogCard'
-import { LoadingSpinner, ErrorMessage, EmptyState } from '@/components'
+import { BlogCard } from "./BlogCard";
+import { LoadingSpinner, ErrorMessage, EmptyState } from "@/components";
 
-export function BlogList() {
-  const { data, isLoading, error, refetch } = useBlogPosts()
+interface BlogListProps {
+  data:
+    | {
+        data: Array<any>;
+      }
+    | undefined;
+  isLoading: boolean;
+  error: any;
+  refetch: () => void;
+}
 
+export function BlogList({ data, isLoading, error, refetch }: BlogListProps) {
   if (isLoading) {
-    return <LoadingSpinner size="lg" />
+    return <LoadingSpinner size="lg" />;
   }
 
   if (error) {
@@ -15,7 +23,7 @@ export function BlogList() {
         message="Failed to load blog posts. Please try again."
         onRetry={() => refetch()}
       />
-    )
+    );
   }
 
   if (!data?.data || data.data.length === 0) {
@@ -24,7 +32,7 @@ export function BlogList() {
         title="No stories yet"
         message="Check back soon for inspiring content"
       />
-    )
+    );
   }
 
   return (
@@ -33,5 +41,5 @@ export function BlogList() {
         <BlogCard key={post.id} post={post} index={index} />
       ))}
     </div>
-  )
+  );
 }
