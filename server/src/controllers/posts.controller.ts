@@ -154,12 +154,26 @@ export const getPublishedPosts = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 20;
+
   try {
-    const posts = await selectPublishedPosts();
-    return res.status(200).json({ data: posts });
+    const { paginatedPosts, totalPosts } = await selectPublishedPosts(
+      page,
+      limit,
+    );
+    return res.status(200).json({
+      data: paginatedPosts,
+      page,
+      limit,
+      total: totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+    });
   } catch (err) {
     console.error("Couldn't fetch public publised posts: ", err);
-    return res.status(500).json("Something went wrong! Failed to get posts");
+    return res
+      .status(500)
+      .json({ message: "Something went wrong! Failed to get posts" });
   }
 };
 

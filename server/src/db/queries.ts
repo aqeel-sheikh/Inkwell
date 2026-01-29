@@ -118,13 +118,15 @@ export const changeUserPostStatus = async (
   });
 };
 
-export const selectPublishedPosts = async () => {
-  return await prisma.blogPost.findMany({
-    where: {
-      published: true,
-    },
+export const selectPublishedPosts = async (page: number, limit: number) => {
+  const paginatedPosts = await prisma.blogPost.findMany({
+    skip: (page - 1) * limit,
+    take: limit,
     orderBy: {
       createdAt: "desc",
+    },
+    where: {
+      published: true,
     },
     include: {
       author: {
@@ -132,6 +134,13 @@ export const selectPublishedPosts = async () => {
       },
     },
   });
+  const totalPosts = await prisma.blogPost.count({
+    where: {
+      published: true,
+    },
+  });
+
+  return { paginatedPosts, totalPosts };
 };
 
 export const selectPublishedPostBySlug = async (slug: string) => {
