@@ -97,6 +97,9 @@
   ::selection {
     @apply bg-primary-900/10 text-primary-900;
   }
+  .dark-section ::selection {
+    @apply bg-white/10 text-primary-300;
+  }
 
   /* Prose styles for blog content */
   .prose {
