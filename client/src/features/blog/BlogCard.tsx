@@ -16,27 +16,27 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
   return (
     <>
       <article
-        className="animate-slide-up"
+        className="animate-slide-up bg-primary-100 rounded-2xl transition-colors hover:bg-primary-700 group"
         style={{ animationDelay: `${index * 100}ms` }}
       >
         <Link to={`/blog/${post.slug}`} className="block">
-          {post.coverImage && (
-            <div className="aspect-video mb-6 overflow-hidden rounded-lg bg-primary-200">
-              <img
-                src={post.coverImage}
-                alt={post.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-          )}
+          <div className="aspect-video mb-6 overflow-hidden rounded-lg bg--200">
+            <img
+              src={
+                post.coverImage || `https://picsum.photos/seed/${index + 1}/400`
+              }
+              alt={post.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
 
-          <div className="space-y-3 border border-primary-100 h-[300px] p-4 bg-white/80 rounded-2xl flex flex-col transition-colors hover:bg-primary-700 group">
+          <div className="space-y-3 h-[300px] pb-4 px-4 rounded-2xl flex flex-col transition-colors">
             {post.tags && post.tags.length > 0 ? (
               <div className="flex gap-2 overflow-x-hidden whitespace-nowrap">
                 {post.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs font-medium px-3 py-1 bg-primary-100 text-primary-500 rounded-full  transition-colors group-hover:text-primary-300 group-hover:bg-primary-600"
+                    className="text-xs font-medium px-3 py-1 bg-primary-200/50 text-primary-500 rounded-full  transition-colors group-hover:text-primary-300 group-hover:bg-primary-600"
                   >
                     {tag}
                   </span>
@@ -65,7 +65,7 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
                     className="w-10 h-10 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-primary-200 flex items-center justify-center transition-colors group-hover:bg-primary-600">
+                  <div className="w-10 h-10 rounded-full bg-primary-200/50 flex items-center justify-center transition-colors group-hover:bg-primary-600">
                     <span className="text-primary-400 font-semibold text-sm transition-colors">
                       {post.author.name.charAt(0).toUpperCase()}
                     </span>
