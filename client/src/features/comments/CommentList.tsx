@@ -18,14 +18,14 @@ function CommentItem({ comment }: { comment: Comment }) {
 
   return (
     <div className="flex gap-4 p-6 bg-white rounded-lg border border-primary-200">
-      {comment.author?.avatar ? (
+      {comment.author.image ? (
         <img
-          src={comment.author.avatar}
+          src={comment.author.image}
           alt={comment.author.name}
           className="w-12 h-12 rounded-full object-cover shrink-0"
         />
       ) : (
-        <div className="w-12 h-12 rounded-full bg-accent-lavender/20 flex items-center justify-center shrink-0">
+        <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center shrink-0">
           <span className="text-accent-lavender font-semibold">
             {comment.author.name.charAt(0).toUpperCase()}
           </span>
@@ -33,12 +33,15 @@ function CommentItem({ comment }: { comment: Comment }) {
       )}
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-baseline gap-2 mb-2">
-          <p className="font-semibold text-primary-900">
-            {comment.author.name}
-          </p>
-          <span className="text-sm text-primary-500">·</span>
-          <p className="text-sm text-primary-500">{formattedDate}</p>
+        <div className="mb-2">
+          <div className="flex items-baseline gap-2">
+            <p className="font-semibold text-primary-900">
+              {comment.author.name}
+            </p>
+            <span className="text-sm text-primary-500">•</span>
+            <p className="text-sm text-primary-500">{formattedDate}</p>
+          </div>
+          <p className="text-xs text-primary-500">@{comment.author.username}</p>
         </div>
         <p className="text-primary-700 leading-relaxed whitespace-pre-wrap">
           {comment.content}
