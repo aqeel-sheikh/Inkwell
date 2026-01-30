@@ -8,3 +8,4 @@ export { Header } from "./Header";
 export { EmptyState } from "./EmptyState";
 export { Modal } from "./Modal";
 export { BlogFilterButtons } from "./BlogFilterDropdown";
+export { BlogArticleCard } from "./BlogArticleCard";
