@@ -72,7 +72,7 @@ export function AppSidebar() {
                 href="/dashboard"
                 className="logo-link flex items-center gap-3"
               >
-                <div className="logo-icon flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-amber-500 to-rose-500 shadow-lg transition-all duration-300">
+                <div className="logo-icon flex h-10 w-10 items-center justify-center rounded-xl bg-stone-800 transition-all duration-300">
                   <BookOpen className="h-6 w-6 text-white" strokeWidth={2} />
                 </div>
                 <span
