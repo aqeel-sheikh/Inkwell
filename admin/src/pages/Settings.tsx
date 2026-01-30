@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Check, ImagePlus, Trash } from "lucide-react";
+import { Check, ImagePlus, Trash, TriangleAlert } from "lucide-react";
 import { useUpdateUser } from "@/features/user/useUser";
 import { useUsernameValidation } from "@/hooks/useUsernameValidation";
 import { UserSchema } from "@/schemas/userData.schema";
@@ -232,7 +232,6 @@ function Settings() {
           >
             <ProfileBg defaultImage={formData?.coverImage || ""} />
             <Avatar defaultImage={formData?.image || ""} />
-
             <div className="px-8 pb-10 pt-6">
               <form
                 className="space-y-8"
@@ -517,7 +516,7 @@ function ProfileBg({ defaultImage }: { defaultImage?: string }) {
         <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/0 transition-all duration-500 group-hover:bg-black/40">
           <button
             type="button"
-            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 border-white/80 bg-white/20 text-white shadow-lg backdrop-blur-md outline-offset-2 transition-all duration-300 hover:scale-110 hover:bg-white/30 focus-visible:outline focus-visible:outline-ring/70"
+            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 border-white/80 bg-white/20 text-stone-500 shadow-lg backdrop-blur-md outline-offset-2 transition-all duration-300 hover:scale-110 hover:bg-white/30 focus-visible:outline focus-visible:outline-ring/70"
             onClick={handleThumbnailClick}
             aria-label={currentImage ? "Change image" : "Upload image"}
           >
@@ -565,7 +564,7 @@ function Avatar({ defaultImage }: { defaultImage?: string }) {
 
   return (
     <div className="-mt-16 px-8">
-      <div className="flex items-end gap-4">
+      <div className="flex flex-wrap items-end gap-4">
         <div className="group relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-linear-to-br from-stone-100 to-stone-200 shadow-2xl shadow-stone-900/20 transition-all duration-500 hover:shadow-3xl hover:shadow-stone-900/30">
           {currentImage && (
             <img
@@ -578,7 +577,7 @@ function Avatar({ defaultImage }: { defaultImage?: string }) {
           )}
           <button
             type="button"
-            className="absolute flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white/80 bg-white/20 text-white shadow-lg backdrop-blur-md outline-offset-2 transition-all duration-300 hover:scale-110 hover:bg-white/30 focus-visible:outline focus-visible:outline-ring/70"
+            className="absolute flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white/80 bg-white/20 text-stone-500 shadow-lg backdrop-blur-md outline-offset-2 transition-all duration-300 hover:scale-110 hover:bg-white/30 focus-visible:outline focus-visible:outline-ring/70"
             onClick={handleThumbnailClick}
             aria-label="Change profile picture"
           >
@@ -607,6 +606,10 @@ function Avatar({ defaultImage }: { defaultImage?: string }) {
             Remove Picture
           </Button>
         )}
+        <div className="text-xs text-stone-400 ml-auto flex gap-1 items-center">
+          <TriangleAlert size={14} />
+          Updating profile or cover images is currently disabled.
+        </div>
       </div>
     </div>
   );
