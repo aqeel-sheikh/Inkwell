@@ -27,7 +27,12 @@ export const UserSchema = z
     email: z.email(),
     image: z.string().optional(),
     coverImage: z.string().optional(),
-    website: z.union([z.url(), z.literal("")]).optional(),
+    website: z
+      .union([
+        z.url("Please enter a valid URL (e.g., https://yourwebsite.com)."),
+        z.literal(""),
+      ])
+      .optional(),
     bio: z
       .string()
       .trim()

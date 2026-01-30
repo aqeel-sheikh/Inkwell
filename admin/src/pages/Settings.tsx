@@ -1,3 +1,4 @@
+import isEqual from "lodash.isequal";
 import { useId, useState, useEffect } from "react";
 import { useSession } from "@/auth/authClient";
 import { useCharacterLimit } from "@/hooks/use-character-limit";
@@ -10,18 +11,33 @@ import { Check, ImagePlus, Trash } from "lucide-react";
 import { useUpdateUser } from "@/features/user/useUser";
 import { useUsernameValidation } from "@/hooks/useUsernameValidation";
 import { UserSchema } from "@/schemas/userData.schema";
+import type { User } from "@/types";
+
+const initialDeconstructedUserData: User = {
+  id: "",
+  name: "",
+  username: "",
+  email: "",
+  image: "",
+  coverImage: "",
+  website: "",
+  bio: "",
+};
 
 function Settings() {
   const id = useId();
   const userData = useSession().data?.user;
   const updateUser = useUpdateUser();
+  const [deconstructedUserData, setDeconstructedUserData] = useState(
+    initialDeconstructedUserData,
+  );
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     image: "",
-    coverImage: "",
+    username: "",
     website: "",
     bio: "",
+    coverImage: "",
   });
   const [fullName, setFullName] = useState({
     firstName: "",
@@ -30,38 +46,60 @@ function Settings() {
   const [name, setName] = useState(
     `${fullName.firstName} ${fullName.lastName}`,
   );
-
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState("");
-
   const { usernameError, isValid } = useUsernameValidation(formData.username);
+  const [isFormDataAndUserDataEqual, setIsFormDataAndUserDataEqual] =
+    useState(true);
 
   useEffect(() => {
     if (userData) {
-      const fullName = userData?.name?.split(" ") ?? [];
-      const firstName = fullName[0];
-      const lastName = (fullName.length > 1 && fullName.at(-1)) || "";
-      const website = userData.website?.substring(8);
-      setFormData({
-        username: userData.username || "",
-        email: userData.email || "",
-        image: userData.image || "",
-        coverImage: userData.coverImage || "",
-        website: website || "",
-        bio: userData.bio || "",
-      });
-      setFullName({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
+      setDeconstructedUserData({
+        id: userData.id,
+        name: userData.name,
+        username: userData.username,
+        email: userData.email,
+        image: userData.image as string,
+        coverImage: userData.coverImage as string,
+        website: userData.website as string,
+        bio: userData.bio as string,
       });
     }
   }, [userData]);
+
+  useEffect(() => {
+    const fullName = deconstructedUserData.name.split(" ") ?? [];
+    const firstName = fullName[0];
+    const lastName = (fullName.length > 1 && fullName.at(-1)) || "";
+    setFormData({
+      username: deconstructedUserData.username || "",
+      email: deconstructedUserData.email || "",
+      image: deconstructedUserData.image || "",
+      coverImage: deconstructedUserData.coverImage || "",
+      website: deconstructedUserData.website || "",
+      bio: deconstructedUserData.bio || "",
+    });
+    setFullName({
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+    });
+  }, [deconstructedUserData]);
 
   useEffect(() => {
     if (fullName) {
       setName(`${fullName.firstName} ${fullName.lastName}`);
     }
   }, [fullName]);
+
+  useEffect(() => {
+    if (deconstructedUserData) {
+      const id = deconstructedUserData.id;
+      const formUserData: User = { id, name, ...formData };
+      setIsFormDataAndUserDataEqual(
+        isEqual(deconstructedUserData, formUserData),
+      );
+    }
+  }, [formData, name]);
 
   const maxLength = 180;
   const {
@@ -93,38 +131,39 @@ function Settings() {
   };
 
   const handleOnReset = () => {
-    if (userData) {
-      const fullName = userData?.name?.split(" ") ?? [];
-      const firstName = fullName[0];
-      const lastName = (fullName.length > 1 && fullName.at(-1)) || "";
-      const website = userData.website?.substring(8);
-      setFormData({
-        username: userData.username || "",
-        email: userData.email || "",
-        image: userData.image || "",
-        coverImage: userData.coverImage || "",
-        website: website || "",
-        bio: userData.bio || "",
-      });
-      setFullName({
-        firstName,
-        lastName,
-      });
-      handleChange({
-        target: { value: userData.bio || "" },
-      } as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
-    }
+    const fullName = deconstructedUserData.name.split(" ") ?? [];
+    const firstName = fullName[0];
+    const lastName = (fullName.length > 1 && fullName.at(-1)) || "";
+    setFormData({
+      username: deconstructedUserData.username || "",
+      email: deconstructedUserData.email || "",
+      image: deconstructedUserData.image || "",
+      coverImage: deconstructedUserData.coverImage || "",
+      website: deconstructedUserData.website || "",
+      bio: deconstructedUserData.bio || "",
+    });
+    setFullName({
+      firstName,
+      lastName,
+    });
+    handleChange({
+      target: { value: deconstructedUserData.bio || "" },
+    } as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+    setFieldErrors({});
+    setGeneralError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const id = userData?.id;
+    setFieldErrors({});
+    setGeneralError("");
+
+    const id = deconstructedUserData.id;
 
     if (!id) return;
 
     const data = {
       ...formData,
-      website: `https://${formData.website}`,
       id,
       name,
     };
@@ -158,22 +197,6 @@ function Settings() {
         className="relative min-h-screen bg-[#fafaf9]"
         style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
       >
-        {/* Sophisticated ambient background */}
-        <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div
-            className="absolute -right-64 -top-64 h-[800px] w-[800px] rounded-full bg-linear-to-br from-amber-100/40 via-rose-100/30 to-transparent opacity-60 blur-3xl animate-float"
-            style={{ animationDelay: "0s" }}
-          />
-          <div
-            className="absolute -bottom-64 -left-64 h-[700px] w-[700px] rounded-full bg-linear-to-tr from-indigo-100/40 via-purple-100/30 to-transparent opacity-50 blur-3xl animate-float"
-            style={{ animationDelay: "2s" }}
-          />
-          <div
-            className="absolute right-1/4 top-1/3 h-[500px] w-[500px] rounded-full bg-linear-to-bl from-emerald-100/30 via-teal-100/20 to-transparent opacity-40 blur-3xl animate-float"
-            style={{ animationDelay: "4s" }}
-          />
-        </div>
-
         {/* Content Container */}
         <div className="relative mx-auto max-w-7xl px-6 py-16 sm:px-8">
           {/* Header */}
@@ -363,21 +386,16 @@ function Settings() {
                     >
                       Website
                     </Label>
-                    <div className="flex rounded-xl shadow-sm">
-                      <span className="inline-flex items-center rounded-s-xl border border-stone-200 bg-stone-50 px-4 text-sm font-medium text-stone-600">
-                        https://
-                      </span>
-                      <Input
-                        id={`${id}-website`}
-                        className="-ms-px rounded-s-none border-stone-200 bg-white/80 shadow-none transition-all duration-300 focus:border-stone-400 focus:bg-white"
-                        placeholder="yourwebsite.com"
-                        value={formData?.website || ""}
-                        name="website"
-                        onChange={handleOnChange}
-                        type="text"
-                        error={fieldErrors.website}
-                      />
-                    </div>
+                    <Input
+                      id={`${id}-website`}
+                      className="inline-flex items-center rounded-s-xl border border-stone-200 bg-stone-50 px-4 text-sm font-medium text-stone-600 shadow-none transition-all duration-300 focus:border-stone-400 focus:bg-white"
+                      placeholder="https://yourwebsite.com"
+                      value={formData?.website || ""}
+                      name="website"
+                      onChange={handleOnChange}
+                      type="text"
+                      error={fieldErrors.website}
+                    />
                   </div>
                 </div>
 
@@ -431,6 +449,7 @@ function Settings() {
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-4 border-t border-stone-200/60 pt-8 sm:flex-row sm:justify-end">
                   <Button
+                    disabled={isFormDataAndUserDataEqual}
                     type="reset"
                     variant="outline"
                     className="cursor-pointer border-stone-200 bg-white/80 font-medium text-stone-700 shadow-sm transition-all duration-300 hover:border-stone-300 hover:bg-stone-50 active:scale-95"
@@ -438,6 +457,7 @@ function Settings() {
                     Discard Changes
                   </Button>
                   <Button
+                    disabled={isFormDataAndUserDataEqual || !isValid}
                     type="submit"
                     className="cursor-pointer border-0 bg-linear-to-br from-stone-900 via-stone-800 to-stone-900 font-medium text-white shadow-lg shadow-stone-900/25 transition-all duration-500 hover:shadow-xl hover:shadow-stone-900/40 hover:scale-105 active:scale-100"
                   >
