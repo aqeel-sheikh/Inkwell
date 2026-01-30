@@ -15,7 +15,7 @@ export const signUpSchema = z
     message: "Passwords do not match",
   })
   .refine((data) => /^[A-Za-z]+( [A-Za-z]+)+$/.test(data.name), {
-    message: "Enter a valid full name",
+    message: "Enter a valid full name. e.g John Doe",
     path: ["name"],
   });
 
@@ -35,6 +35,6 @@ export const UserSchema = z
       .optional(),
   })
   .refine((data) => /^[A-Za-z]+( [A-Za-z]+)+$/.test(data.name), {
-    message: "Enter a valid full name",
+    message: "Enter a valid full name e.g John Doe",
     path: ["name"],
   });
