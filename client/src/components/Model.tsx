@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { MouseEventHandler, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { XIcon } from "lucide-react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -43,26 +44,6 @@ export function Model({ isOpen, onClose, children, size = "md" }: ModalProps) {
         <div
           className={`relative bg-white rounded-xl shadow-xl w-full ${sizes[size]} animate-scale-in`}
         >
-          <div className="flex items-center justify-end p-2">
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
           <div>{children}</div>
         </div>
       </div>
@@ -70,3 +51,20 @@ export function Model({ isOpen, onClose, children, size = "md" }: ModalProps) {
     document.body,
   );
 }
+
+export const ModelCloseButton = ({
+  onClose,
+}: {
+  onClose: MouseEventHandler<HTMLButtonElement>;
+}) => {
+  return (
+    <div className="flex items-center justify-end p-2">
+      <button
+        onClick={onClose}
+        className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+      >
+        <XIcon className="" />
+      </button>
+    </div>
+  );
+};

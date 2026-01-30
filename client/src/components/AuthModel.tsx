@@ -7,22 +7,26 @@ import { RegisterForm } from "./RegisterForm";
 const AuthModel = () => {
   const loginFormRef = useRef<HTMLDivElement>(null);
   const registerFormRef = useRef<HTMLDivElement>(null);
-
   const [model, setModel] = useState<boolean>(false);
 
-  const handleDeleteClick = () => {
+  const handleModelOpen = () => {
     setModel(true);
+  };
+  const handleModelClose = () => {
+    setModel(false);
   };
   return (
     <>
-      <Model isOpen={model} onClose={() => setModel(false)} size="sm">
+      <Model isOpen={model} onClose={handleModelClose} size="sm">
         <LoginForm
           setModel={setModel}
+          onClose={handleModelClose}
           registerFormRef={registerFormRef as React.RefObject<HTMLDivElement>}
           myRef={loginFormRef as React.RefObject<HTMLDivElement>}
         />
         <RegisterForm
           setModel={setModel}
+          onClose={handleModelClose}
           loginFormRef={loginFormRef as React.RefObject<HTMLDivElement>}
           myRef={registerFormRef as React.RefObject<HTMLDivElement>}
         />
@@ -30,7 +34,7 @@ const AuthModel = () => {
       <Button
         variant="default"
         className="cursor-pointer"
-        onClick={() => handleDeleteClick()}
+        onClick={() => handleModelOpen()}
       >
         Sign In
       </Button>
