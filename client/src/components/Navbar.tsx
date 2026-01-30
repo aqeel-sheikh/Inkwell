@@ -58,7 +58,7 @@ export function Navbar() {
                   <Button
                     variant="default"
                     onClick={() => signOut()}
-                    className="rounded-xl border-0 bg-linear-to-br from-stone-900 via-stone-800 to-stone-900 font-medium text-white transition-all duration-300 hover:shadow-lg"
+                    className="rounded-xl border-0 bg-linear-to-br from-stone-900 via-stone-800 to-stone-900 font-medium text-white transition-all duration-300 hover:shadow-sm cursor-pointer"
                     style={{ fontFamily: "'DM Sans', sans-serif" }}
                   >
                     Log out
