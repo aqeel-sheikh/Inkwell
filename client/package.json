@@ -11,8 +11,7 @@
     "prepare": "husky && husky install"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown",
-    "*.{js,css,md, jsx, tsx}": "prettier --write"
+    "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
@@ -41,6 +40,9 @@
     "eslint": "^9.18.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
+    "eslint-plugin-react": "^7.37.5",
+    "typescript-eslint": "^8.53.1",
+    "globals": "^17.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "3.8.0",
