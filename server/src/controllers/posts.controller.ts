@@ -10,12 +10,13 @@ import {
   selectPublishedPosts,
   selectPublishedPostBySlug,
 } from "@/db/queries";
+import type { AuthenticatedRequest } from "@/types/types";
 
 export const createPost = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
-  const userId = (req as any).userId;
+  const userId = (req as AuthenticatedRequest).userId;
 
   const result = blogPostSchema.safeParse(req.body);
   if (!result.success) {
@@ -40,7 +41,7 @@ export const getUserPosts = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
-  const userId = (req as any).userId;
+  const userId = (req as AuthenticatedRequest).userId;
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 20;
 
@@ -67,7 +68,7 @@ export const getPostDetails = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
-  const userId = (req as any).userId;
+  const userId = (req as AuthenticatedRequest).userId;
   const postId = req.params.postId as string;
 
   try {
@@ -86,7 +87,7 @@ export const editUserPost = async (
   const postId = req.params.postId as string;
   if (!postId) return res.status(404).json({ message: "Post not found!" });
 
-  const userId = (req as any).userId;
+  const userId = (req as AuthenticatedRequest).userId;
 
   const result = blogPostSchema.safeParse(req.body);
   if (!result.success) {
@@ -115,7 +116,7 @@ export const removeUserPost = async (
   const postId = req.params.postId as string;
   if (!postId) return res.status(404).json({ message: "Post not found!" });
 
-  const userId = (req as any).userId;
+  const userId = (req as AuthenticatedRequest).userId;
 
   try {
     await deleteUserPost(postId, userId);
@@ -132,7 +133,7 @@ export const editUserPostStatus = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
-  const userId = (req as any).userId;
+  const userId = (req as AuthenticatedRequest).userId;
   const { postId, publishStatus } = req.body as {
     postId: string;
     publishStatus: boolean;

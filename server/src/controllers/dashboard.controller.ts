@@ -1,11 +1,12 @@
 import type { Request, Response } from "express";
 import { selectDashboardStats } from "@/db/queries";
+import type { AuthenticatedRequest } from "@/types/types";
 
 export const getDashboardStats = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
-  const userId = (req as any).userId;
+  const userId = (req as AuthenticatedRequest).userId;
 
   try {
     const { totalPosts, publishedPosts, draftPosts, totalViews } =

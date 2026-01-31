@@ -199,7 +199,7 @@ export const selectCheckUsername = async (username: string) => {
 };
 
 export const updateUser = async (user: User, id: string) => {
-  const updatedUser = await prisma.user.update({
+  await prisma.user.update({
     where: {
       id,
     },

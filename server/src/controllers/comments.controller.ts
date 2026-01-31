@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { selectPublishedPostComments, insertComment } from "@/db/queries";
+import type { AuthenticatedRequest } from "@/types/types";
 
 export const getPublishedPostComments = async (
   req: Request,
@@ -23,7 +24,7 @@ export const createComment = async (
   res: Response,
 ): Promise<Response> => {
   const { content, postId }: { content: string; postId: string } = req.body;
-  const userId = (req as any).userId;
+  const userId = (req as AuthenticatedRequest).userId;
 
   try {
     await insertComment(postId, userId, content);

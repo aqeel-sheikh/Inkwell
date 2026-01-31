@@ -3,6 +3,7 @@ import { selectCheckUsername, updateUser } from "@/db/queries";
 import { UserSchema, type UserDto, type User } from "@/types/users.schema";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "@/lib/auth";
+import type { AuthenticatedRequest } from "@/types/types";
 
 export const checkUsername = async (
   req: Request,
@@ -41,8 +42,8 @@ export const updateUserProfile = async (
   res: Response,
 ): Promise<Response> => {
   const userData = req.body as UserDto;
-  const userId = (req as any).userId;
-  const currentUsername = (req as any).username;
+  const userId = (req as AuthenticatedRequest).userId;
+  const currentUsername = (req as AuthenticatedRequest).username;
 
   const result = UserSchema.safeParse(userData);
   if (!result.success) {
