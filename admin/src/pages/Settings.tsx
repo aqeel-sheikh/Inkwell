@@ -180,13 +180,32 @@ function Settings() {
 
     try {
       await updateUser.mutateAsync(data);
-    } catch (err: any) {
-      if (err.status === 400) {
-        setFieldErrors(err.fieldErrors);
-      } else if (err.status === 409) {
-        setFieldErrors((prev) => ({ ...prev, username: err.message }));
+    } catch (err) {
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "status" in err &&
+        (err as { status?: number }).status === 400 &&
+        "fieldErrors" in err
+      ) {
+        setFieldErrors(
+          (err as { fieldErrors: Record<string, string> }).fieldErrors,
+        );
+      } else if (
+        typeof err === "object" &&
+        err !== null &&
+        "status" in err &&
+        (err as { status?: number }).status === 409 &&
+        "message" in err
+      ) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          username: (err as { message: string }).message,
+        }));
+      } else if (typeof err === "object" && err !== null && "message" in err) {
+        setGeneralError((err as { message: string }).message);
       } else {
-        setGeneralError(err.message);
+        setGeneralError("An unexpected error occurred.");
       }
     }
   };

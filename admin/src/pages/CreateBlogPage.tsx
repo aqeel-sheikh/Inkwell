@@ -17,11 +17,26 @@ export function CreateBlogPage() {
     try {
       await createBlog.mutateAsync(data);
       navigate("/dashboard/blogs");
-    } catch (error: any) {
-      if (error.status === 400 && error.fieldErrors) {
-        setFieldErrors(error.fieldErrors);
+    } catch (error) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "status" in error &&
+        (error as { status: number }).status === 400 &&
+        "fieldErrors" in error
+      ) {
+        setFieldErrors(
+          (error as { fieldErrors: Record<string, string> }).fieldErrors,
+        );
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof (error as { message: unknown }).message === "string"
+      ) {
+        setGeneralError((error as { message: string }).message);
       } else {
-        setGeneralError(error.message);
+        setGeneralError("An unexpected error occurred.");
       }
     }
   };
