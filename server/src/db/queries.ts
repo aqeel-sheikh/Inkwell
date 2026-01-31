@@ -4,7 +4,7 @@ import type { User } from "@/types/users.schema";
 import type {
   BlogPostGroupByOutputType,
   PickEnumerable,
-} from "@generated/prisma/internal/prismaNamespace";
+} from "../generated/prisma/internal/prismaNamespace";
 import { customAlphabet } from "nanoid";
 import slugify from "slugify";
 

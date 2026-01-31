@@ -26,11 +26,13 @@ app.all("/api/auth{*any}", toNodeHandler(auth));
 // Routes
 app.use("/", router);
 
-// For local development only
-// const PORT = 3000
-//  app.listen(PORT, (err) =>{
-//   if (err)console.error("Cant start the server", err)
-//   console.log(`Listning at http://localhost:${PORT}`)
-// })
+// For development only
+if (process.env.NODE_ENV === "development") {
+  const PORT = 3000;
+  app.listen(PORT, (err: unknown) => {
+    if (err) console.error("Cant start the server", err);
+    console.log(`Listning at http://localhost:${PORT}`);
+  });
+}
 
 export default app;

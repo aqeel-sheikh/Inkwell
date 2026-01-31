@@ -14,4 +14,4 @@ pnpm-debug.log*
 
 .DS_Store
 *.tsbuildinfo
-/generated/prisma
+**/generated/prisma
