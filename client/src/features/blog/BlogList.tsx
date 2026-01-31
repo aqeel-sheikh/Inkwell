@@ -4,11 +4,11 @@ import { LoadingSpinner, ErrorMessage, EmptyState } from "@/components";
 interface BlogListProps {
   data:
     | {
-        data: Array<any>;
+        data: [];
       }
     | undefined;
   isLoading: boolean;
-  error: any;
+  error: unknown;
   refetch: () => void;
 }
 
@@ -37,9 +37,11 @@ export function BlogList({ data, isLoading, error, refetch }: BlogListProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-      {data.data.map((post, index) => (
-        <BlogCard key={post.id} post={post} index={index} />
-      ))}
+      {data.data.map((postArr: unknown, index: number) => {
+        // Defensive: Check if postArr is an object (BlogPost) or an array containing the object
+        const post = Array.isArray(postArr) ? postArr[0] : postArr;
+        return <BlogCard key={post.id} post={post} index={index} />;
+      })}
     </div>
   );
 }
