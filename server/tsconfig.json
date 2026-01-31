@@ -49,5 +49,9 @@
     "skipLibCheck": true
   },
   "include": ["src/**/*", "generated/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.config.ts", "**/*.config.js"]
+  "exclude": ["node_modules", "dist", "**/*.config.ts", "**/*.config.js"],
+  "tsc-alias": {
+    "resolveFullPaths": true,
+    "resolveFullExtension": ".js"
+  }
 }
