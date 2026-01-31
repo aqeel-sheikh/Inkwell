@@ -99,7 +99,7 @@ function Settings() {
         isEqual(deconstructedUserData, formUserData),
       );
     }
-  }, [formData, name]);
+  }, [deconstructedUserData, formData, name]);
 
   const maxLength = 180;
   const {

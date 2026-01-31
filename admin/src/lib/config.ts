@@ -16,7 +16,7 @@ export const API_ENDPOINTS = {
     create: () => `${API_BASE_URL}/posts`,
     update: (id: string) => `${API_BASE_URL}/posts/${id}`,
     delete: (id: string) => `${API_BASE_URL}/posts/${id}`,
-    changePublishStatus: (id: string) =>
+    changePublishStatus: (_id: string) =>
       `${API_BASE_URL}/posts/changePublishStatus`,
   },
   dashboard: {
