@@ -1,6 +1,10 @@
 import { prisma } from "@/config/prisma";
 import type { BlogPostType } from "@/types/posts.schema";
 import type { User } from "@/types/users.schema";
+import type {
+  BlogPostGroupByOutputType,
+  PickEnumerable,
+} from "@generated/prisma/internal/prismaNamespace";
 import { customAlphabet } from "nanoid";
 import slugify from "slugify";
 
@@ -91,8 +95,16 @@ export const selectDashboardStats = async (userId: string) => {
     where: { authorId: userId },
     _count: { _all: true },
   });
-  const published = stats.find((s) => s.published)?._count._all ?? 0;
-  const drafts = stats.find((s) => !s.published)?._count._all ?? 0;
+  const published =
+    stats.find(
+      (s: PickEnumerable<BlogPostGroupByOutputType, "published"[]>) =>
+        s.published,
+    )?._count._all ?? 0;
+  const drafts =
+    stats.find(
+      (s: PickEnumerable<BlogPostGroupByOutputType, "published"[]>) =>
+        !s.published,
+    )?._count._all ?? 0;
 
   return {
     totalPosts: published + drafts,
