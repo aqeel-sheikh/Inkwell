@@ -9,5 +9,5 @@ const app = createApp();
 app.listen(PORT, (err: unknown) => {
   if (err) console.error("Can't start the sever", err);
 
-  console.log(`Server is listening at http://localhost:${PORT}`);
+  console.log(`Server is listening at Port:${PORT}`);
 });
