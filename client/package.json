@@ -1,7 +1,10 @@
 {
-  "name": "blog-client",
-  "private": true,
+  "name": "inkwell-client",
   "version": "1.0.0",
+  "description": "Public site where readers browse and read posts.",
+  "author": "Aqeel Sheikh",
+  "license": "MIT",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",

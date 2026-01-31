@@ -1,7 +1,10 @@
 {
-  "name": "blog-client",
-  "private": true,
+  "name": "inkwell-admin",
   "version": "1.0.0",
+  "description": "Admin dashboard for managing the blog.",
+  "author": "Aqeel Sheikh",
+  "license": "MIT",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
