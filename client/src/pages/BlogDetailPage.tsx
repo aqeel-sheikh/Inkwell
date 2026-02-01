@@ -7,6 +7,7 @@ import { ErrorMessage } from "@/components";
 import { useSession } from "@/auth/auth-client";
 import { ChevronLeft, Clock, Calendar } from "lucide-react";
 import { calculateReadingTime } from "@/lib/utils";
+import parse from "html-react-parser"
 
 export function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -139,7 +140,7 @@ export function BlogDetailPage() {
             style={{ fontFamily: "'Lora', 'Georgia', serif" }}
           >
             <div className="whitespace-pre-wrap wrap-break-word break-all leading-relaxed text-stone-800">
-              {post.content}
+              {parse(post.content)}
             </div>
           </div>
 

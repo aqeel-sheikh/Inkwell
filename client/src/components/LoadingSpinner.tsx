@@ -8,7 +8,7 @@ export function LoadingSpinner({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   return (
     <div className="flex items-center justify-center p-8">
       <div
-        className={`${sizes[size]} border-4 border-primary-300 border-t-accent-coral rounded-full animate-spin`}
+        className={`${sizes[size]} border-4 border-primary-300 border-t-primary-800 rounded-full animate-spin`}
       />
     </div>
   );
