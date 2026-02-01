@@ -222,6 +222,7 @@ Run from each app’s directory (`server`, `admin`, or `client`).
 | `npm start` | Run production build (`node dist/server.js`). |
 | `npm run lint` | Run ESLint. |
 | `npm run format` | Prettier on `src`. |
+| `npx lint-staged` | Prittier on staged files. |
 | `npx prisma migrate dev` | Apply migrations in development. |
 | `npx prisma migrate deploy` | Apply migrations (e.g. production). |
 
@@ -234,6 +235,7 @@ Run from each app’s directory (`server`, `admin`, or `client`).
 | `npm run preview` | Preview production build. |
 | `npm run lint` | Run ESLint (admin: `lint:fix` available). |
 | `npm run prepare` | Husky install (pre-commit hooks). |
+| `npx lint-staged` | Prittier on staged files. |
 
 ---
 
