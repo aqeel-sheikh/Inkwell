@@ -1,6 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components";
 import type { CreateBlogDto, BlogPost } from "@/types";
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import { useEditor } from "@tiptap/react";
+
+// --- Tiptap Core Extensions ---
+import { StarterKit } from "@tiptap/starter-kit";
+import { TaskItem, TaskList } from "@tiptap/extension-list";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { Typography } from "@tiptap/extension-typography";
+import { Highlight } from "@tiptap/extension-highlight";
+import { Subscript } from "@tiptap/extension-subscript";
+import { Superscript } from "@tiptap/extension-superscript";
+import { Selection } from "@tiptap/extensions";
+
+import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension";
+import { CloseIcon } from "@/components/tiptap-icons/close-icon";
+import { Settings, TriangleAlert } from "lucide-react";
 
 interface BlogFormProps {
   initialData?: BlogPost;
@@ -11,6 +27,11 @@ interface BlogFormProps {
   onCancel?: () => void;
 }
 
+const initialInputErrors = {
+  titleError: "",
+  contentError: "",
+  excerptError: "",
+};
 export function BlogForm({
   initialData,
   onSubmit,
@@ -32,6 +53,7 @@ export function BlogForm({
   const [tagsInput, setTagsInput] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const titleRef = useRef<HTMLTextAreaElement>(null);
+  const [inputErros, setInputErrors] = useState(initialInputErrors);
 
   useEffect(() => {
     if (initialData) {
@@ -47,16 +69,74 @@ export function BlogForm({
     }
   }, [initialData]);
 
+  const editor = useEditor({
+    immediatelyRender: true,
+    editorProps: {
+      attributes: {
+        autocomplete: "off",
+        autocorrect: "off",
+        autocapitalize: "off",
+        "aria-label": "Main content area, start typing to enter text.",
+        class: "simple-editor",
+      },
+    },
+    extensions: [
+      StarterKit.configure({
+        horizontalRule: false,
+        link: {
+          openOnClick: false,
+          enableClickSelection: true,
+        },
+      }),
+      HorizontalRule,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      TaskList,
+      TaskItem.configure({ nested: true }),
+      Highlight.configure({ multicolor: true }),
+      Typography,
+      Superscript,
+      Subscript,
+      Selection,
+    ],
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setInputErrors(initialInputErrors);
+    console.log(inputErros);
+
+    const content = editor.getHTML();
 
     const tags = tagsInput
       .split(",")
       .map((tag) => tag.trim())
       .filter(Boolean);
 
+    if (formData.title.trim().length < 4) {
+      setInputErrors({
+        ...initialInputErrors,
+        titleError: "Title must be at least 4 characters long !",
+      });
+      return;
+    }
+    if (!hasRealContent(content)) {
+      setInputErrors({
+        ...initialInputErrors,
+        contentError: "Blog content cannot be empty !",
+      });
+      return;
+    }
+    if (formData.excerpt.trim().length < 10) {
+      setInputErrors({
+        ...initialInputErrors,
+        excerptError: "Blog summary must be at least 10 characters long !",
+      });
+      return;
+    }
+
     await onSubmit({
       ...formData,
+      content,
       tags: [...new Set([...(formData.tags || []), ...tags])],
     });
   };
@@ -92,17 +172,6 @@ export function BlogForm({
   return (
     <>
       <div className="relative min-h-screen bg-[#fafaf9]">
-        {/* Ambient background */}
-        <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div
-            className="absolute -right-64 -top-64 h-[800px] w-[800px] rounded-full bg-linear-to-br from-amber-100/40 via-rose-100/30 to-transparent opacity-60 blur-3xl animate-float"
-            style={{ animationDelay: "0s" }}
-          />
-          <div
-            className="absolute -bottom-64 -left-64 h-[700px] w-[700px] rounded-full bg-linear-to-tr from-indigo-100/40 via-purple-100/30 to-transparent opacity-50 blur-3xl animate-float"
-            style={{ animationDelay: "2s" }}
-          />
-        </div>
         {/* Aside backdrop close */}
         {showSettings && (
           <div
@@ -120,19 +189,7 @@ export function BlogForm({
                   className="rounded-lg p-2 text-stone-600 transition-colors hover:bg-stone-100 cursor-pointer"
                   title="Exit"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <CloseIcon className="h-5 w-5" />
                 </button>
               )}
               <div className="flex items-center gap-2 rounded-full border border-stone-200/60 bg-stone-50/50 px-3 py-1.5">
@@ -151,25 +208,13 @@ export function BlogForm({
         </header>
 
         {/* Writing canvas */}
-        <section className="h-full mx-auto max-w-5xl overflow-y-auto pt-5 pb-32">
+        <section className="h-full mx-auto max-w-5xl overflow-y-auto py-5 ">
           <div className="mx-auto px-6 md:px-8">
             {/* Error */}
             {generalError && (
               <div className="mb-8 rounded-2xl border border-red-200/60 bg-red-50/40 p-6">
                 <div className="flex items-start gap-3">
-                  <svg
-                    className="h-5 w-5 shrink-0 text-red-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                    />
-                  </svg>
+                  <TriangleAlert className="h-5 w-5 shrink-0 text-red-600" />
                   <p
                     className="text-sm text-red-800"
                     style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -192,14 +237,15 @@ export function BlogForm({
                 required
                 rows={1}
               />
-              {fieldErrors.title && (
-                <p
-                  className="text-sm text-red-600 -mt-6"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
-                >
-                  {fieldErrors.title}
-                </p>
-              )}
+              {fieldErrors.title ||
+                (inputErros.titleError && (
+                  <p
+                    className="text-sm text-red-600 -mt-6 border w-fit p-2 rounded-lg border-red-100 bg-red-50"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    {fieldErrors.title || inputErros.titleError}
+                  </p>
+                ))}
 
               {/* Cover Image */}
               {formData.coverImage && (
@@ -221,29 +267,10 @@ export function BlogForm({
               )}
 
               {/* Content */}
-              <textarea
-                className="text-[1.125rem] max-md:text-[1rem] leading-[1.75] text-[#292524] outline-none w-full overflow-hidden resize-none bg-transparent p-0"
-                onInput={(e: React.FormEvent<HTMLTextAreaElement>) => {
-                  const target = e.currentTarget;
-                  target.style.height = "auto";
-                  target.style.height = `${target.scrollHeight}px`;
-                }}
-                placeholder="Tell your story..."
-                value={formData.content}
-                onChange={(e) =>
-                  setFormData({ ...formData, content: e.target.value })
-                }
-                required
-                style={{ fontFamily: "'Lora', 'Georgia', serif" }}
+              <SimpleEditor
+                editor={editor}
+                error={fieldErrors.content || inputErros.contentError}
               />
-              {fieldErrors.content && (
-                <p
-                  className="text-sm text-red-600 -mt-6"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
-                >
-                  {fieldErrors.content}
-                </p>
-              )}
             </form>
           </div>
         </section>
@@ -263,19 +290,7 @@ export function BlogForm({
                   onClick={() => setShowSettings(false)}
                   className="rounded-lg p-2 text-stone-600 hover:bg-stone-100 cursor-pointer"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <CloseIcon className="h-5 w-5" />
                 </button>
               </div>
 
@@ -318,14 +333,15 @@ export function BlogForm({
                     rows={3}
                     style={{ fontFamily: "'DM Sans', sans-serif" }}
                   />
-                  {fieldErrors.excerpt && (
-                    <p
-                      className="text-sm text-red-500"
-                      style={{ fontFamily: "'DM Sans', sans-serif" }}
-                    >
-                      {fieldErrors.excerpt}
-                    </p>
-                  )}
+                  {fieldErrors.excerpt ||
+                    (inputErros.excerptError && (
+                      <p
+                        className="text-sm text-red-600 border w-fit p-2 rounded-lg border-red-100 bg-red-50"
+                        style={{ fontFamily: "'DM Sans', sans-serif" }}
+                      >
+                        {fieldErrors.excerpt || inputErros.excerptError}
+                      </p>
+                    ))}
                 </div>
 
                 {/* Tags */}
@@ -413,27 +429,11 @@ export function BlogForm({
           onClick={() => setShowSettings(!showSettings)}
           className="fixed bottom-8 right-8 z-40 flex h-14 w-14 items-center justify-center rounded-full border border-stone-200 bg-white shadow-xl transition-all hover:scale-110 hover:shadow-2xl cursor-pointer"
         >
-          <svg
-            className="h-6 w-6 text-stone-700"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
-          {fieldErrors.excerpt && (
-            <span className="absolute h-3 w-3 bg-red-500 border border-stone-300 shadow-black shadow-xl top-1 -left-px rounded-full" />
-          )}
+          <Settings className="h-6 w-6 text-stone-700" />
+          {fieldErrors.excerpt ||
+            (inputErros.excerptError && (
+              <span className="absolute h-3 w-3 bg-red-500 border border-stone-300 shadow-black shadow-xl top-1 -left-px rounded-full" />
+            ))}
         </button>
       </div>
     </>
@@ -483,3 +483,13 @@ const FormSubmitButton = ({
     </Button>
   </div>
 );
+
+const hasRealContent = (html: string) => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+
+  doc.querySelectorAll("br").forEach((br) => br.remove());
+
+  const text = doc.body.textContent?.replace(/\u00A0/g, "").trim();
+
+  return text.length > 0;
+};
