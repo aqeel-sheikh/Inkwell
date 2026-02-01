@@ -100,6 +100,11 @@ export function BlogForm({
     ],
   });
 
+  useEffect(() =>{
+    const content = initialData?.content
+    if(content) editor.commands.setContent(content)
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setInputErrors(initialInputErrors);
