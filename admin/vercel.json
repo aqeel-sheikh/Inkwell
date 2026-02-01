@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/auth/:path*",
+      "destination": "https://inkwell-backend-green.vercel.app/api/auth/:path*"
+    }
+  ]
+}
