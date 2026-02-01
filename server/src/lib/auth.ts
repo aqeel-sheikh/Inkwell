@@ -4,6 +4,8 @@ import { prisma } from "@/config/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import "dotenv/config";
 
+const isProd = process.env.NODE_ENV === "production";
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -16,13 +18,15 @@ export const auth = betterAuth({
     process.env.ADMIN_FRONTEND_URL!,
     process.env.CLIENT_FRONTEND_URL!,
   ],
-  advanced:{
-    defaultCookieAttributes: {
-      sameSite: "none",
-      secure: true,
-      partitioned: true,
-    },
-  },
+  advanced: isProd
+    ? {
+        defaultCookieAttributes: {
+          sameSite: "none",
+          secure: true,
+          partitioned: true,
+        },
+      }
+    : undefined,
   user: {
     additionalFields: {
       username: {
