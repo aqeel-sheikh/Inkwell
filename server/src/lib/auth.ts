@@ -16,6 +16,13 @@ export const auth = betterAuth({
     process.env.ADMIN_FRONTEND_URL!,
     process.env.CLIENT_FRONTEND_URL!,
   ],
+  advanced:{
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+      partitioned: true,
+    },
+  },
   user: {
     additionalFields: {
       username: {
