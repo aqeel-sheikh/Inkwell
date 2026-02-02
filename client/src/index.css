@@ -302,3 +302,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hamburger */
+.hamburger-line1 {
+  transform: rotate(45deg);
+  opacity: 0;
+}
+
+.hamburger-line2,
+.hamburger-line3 {
+  transform-origin: center;
+  will-change: transform;
+}
+
+.hamburger-line2 {
+  transform: rotate(45deg);
+}
+
+.hamburger-line3 {
+  transform: rotate(-45deg) translateY(-6px) translateX(6px);
+}
+.hamburgerMenu {
+  opacity: 0;
+  transform: translateY(-1.2rem);
+  transition: all 300ms;
+}
+.hamburgerMenu.active {
+  opacity: 1;
+  transform: translateY(0px);
+}
